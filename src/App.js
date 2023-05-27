@@ -20,42 +20,6 @@ import customAxios from "./axios";
 
 function App() {
 
-  const data = {
-    'author_id': 1,
-    'author_name': 'varsha',
-    'email': 'varsha@gmail.com',
-    'password': '123',
-    'reviewer_role': 'Yes'
-  };
-
-  useEffect(() => {
-    loadUserSession();
-    storeIntoApplicationStorage(data);
-  }, []);
-
-  async function loadUserSession() {
-
-    const _session = getApplicationStorage();
-
-    if (_session) {
-      return;
-    }
-
-    try {
-      const result = await customAxios.get('/api/uniq_auth_id2');
-
-      if (result.status !== 200) {
-        return;
-      }
-
-      storeIntoApplicationStorage(result.data);
-
-    } catch (exception) {
-      console.log(exception);
-    }
-
-  }
-
   return (
     <div>
       <Navbar />

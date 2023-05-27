@@ -103,13 +103,13 @@ const Dashboard = () => {
   };
 
   const auth = () => {
-    fetch("/api/uniq_auth_id2")
-      .then(response => {
-        return response.json()
-      })
-      .then(dataautdet => {
-        setauthadat(dataautdet)
-      })
+    // fetch("/api/uniq_auth_id2")
+    //   .then(response => {
+    //     return response.json()
+    //   })
+    //   .then(dataautdet => {
+    //     setauthadat(dataautdet)
+    //   })
   }
 
   const unidis = () => {

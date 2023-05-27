@@ -8,6 +8,7 @@ import customAxios from "../axios";
 import messages from '../constants/messages';
 
 import "./login_css.css"
+import { storeIntoApplicationStorage } from "../utilities/storage";
 
 const Login = () => {
 
@@ -34,7 +35,8 @@ const Login = () => {
 
       if (result.status === 200) {
         alert(messages.loginSuccessfully);
-        return navigate('/usrgenerate');
+        storeIntoApplicationStorage(result.data)
+        return navigate('/dashboard');
       }
 
       alert(messages.somethingWentWrong);
@@ -90,7 +92,7 @@ const Login = () => {
         <div className="field">
           <label for="email">Email</label>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <input type="text" name="email" id="email" required />
+          <input type="text" name="email" id="email" required />
         </div>
 
         <div className="field">
@@ -102,7 +104,7 @@ const Login = () => {
           <input type="radio" id="a_role" name="role" value="author" />
           <label for="author">Author</label>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <input type="radio" id="r_role" name="role" value="reviewer" />
+          <input type="radio" id="r_role" name="role" value="reviewer" />
           <label for="reviewer">Reviewer</label>
         </div>
 
