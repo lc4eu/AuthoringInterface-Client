@@ -13,8 +13,6 @@ import Modal from 'react-modal';
 import axios from "axios";
 import { Pagination } from "@mui/material";
 
-
-
 var JSZip = require("jszip");
 
 const Dashboard = () => {
@@ -156,8 +154,6 @@ const Dashboard = () => {
   // const url = `/usrgenerate_view?data=${ddata}`;
   const url = `/usrgenerate_view?did=${discourseid}`;
 
-
-
   const showUSR = (sentences, discourse_id, discourse_name) => {
     setDiscourseId(discourse_id)
     let str = []
@@ -178,13 +174,10 @@ const Dashboard = () => {
     setddata(JSON.stringify(d))
   }
 
-
-
-
   return (
     <>
 
-      <nav>
+      {/* <nav>
         <NavLink to="/">
           <p>Authoring Interface</p>
         </NavLink>
@@ -193,17 +186,16 @@ const Dashboard = () => {
             <li>
               <NavLink to="/dashboard">
                 <FaUser></FaUser> {authdata.author_name}
-
               </NavLink>
             </li>
             <li>
-              <Button variant="contained" href="http://localhost:9999/logout">
+              <Button variant="contained">
                 Logout
               </Button>
             </li>
           </ul>
         </div>
-      </nav>
+      </nav> */}
 
 
       <div className="components">

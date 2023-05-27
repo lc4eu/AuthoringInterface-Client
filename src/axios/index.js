@@ -1,5 +1,7 @@
 import axios from "axios";
 
+import messages from '../constants/messages';
+
 const serverURl = process.env.REACT_APP_API_BASE_URL;
 
 const customAxios = axios.create({
@@ -17,7 +19,7 @@ const responseHandler = (response) => {
 const errorHandler = (error) => {
 
   if (error.request.status === 500) {
-    alert('Internal Server Error. Try again later!');
+    alert(messages.internalServerError);
     throw (error);
   }
 

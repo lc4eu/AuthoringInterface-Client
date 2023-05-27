@@ -5,6 +5,8 @@ import Navbar from "./Navbar";
 import { useNavigate } from "react-router-dom";
 import customAxios from "../axios";
 
+import messages from '../constants/messages';
+
 import "./login_css.css"
 
 const Login = () => {
@@ -24,18 +26,18 @@ const Login = () => {
         reviewer_role: formTarget.role.value
       };
 
-      const response = await customAxios.post('api/login/', params);
+      const result = await customAxios.post('api/login/', params);
 
-      if (response.status === 401) {
-        return alert('Invalid Credentials!');
+      if (result.response?.status === 401) {
+        return alert(messages.invalidCredentials);
       }
 
-      if (response.status === 200) {
-        alert("Login Successfully!");
+      if (result.status === 200) {
+        alert(messages.loginSuccessfully);
         return navigate('/usrgenerate');
       }
 
-      alert('Something went wrong, Try again later!');
+      alert(messages.somethingWentWrong);
 
     } catch (exception) {
       console.log(exception);
@@ -54,28 +56,28 @@ const Login = () => {
   //     },
   //     body: JSON.stringify({ "email": event.target.email.value, "password": event.target.password.value, 'reviewer_role': event.target.role.value })
   //   })
-  //     .then(response => {
-  //       if (response.status === 200) {
+  //     .then(result => {
+  //       if (result.status === 200) {
   //         alert("Login Successfully!");
   //         navigate('/usrgenerate');
   //       }
-  //       else if (response.status === 201) {
+  //       else if (result.status === 201) {
   //         alert("Login Successfully!");
   //         navigate('/');
   //       }
-  //       else if (response.status === 202) {
+  //       else if (result.status === 202) {
   //         alert("You are not a reviewer!");
   //         navigate('/login');
   //       }
-  //       else if (response.status === 203) {
+  //       else if (result.status === 203) {
   //         alert("Login Successfully!");
   //         navigate('/usrgenerate');
   //       }
-  //       else if (response.status === 401) {
+  //       else if (result.status === 401) {
   //         alert("Invalid credentials!");
   //       }
   //     })
-  //     .then(response => console.log(JSON.stringify(response)))
+  //     .then(result => console.log(JSON.stringify(result)))
   //     .catch(error => console.error(error));
   // }
 
