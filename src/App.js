@@ -13,29 +13,28 @@ import USRV from "./USRgenerationFolder/USR_view";
 import { Routes, Route } from "react-router-dom";
 import Logout from "./Navigation/Logout";
 import USRgenerate_view from "./USRgenerationFolder/USRgenerate_view";
-
-
-
-
+import Navbar from "./Navigation/Navbar";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/about" element={<About />} />
-      <Route path="/contact" element={<ContactUs />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/logout" element={<Logout />} />
-      <Route path="/usrgenerate" element={<USRgenerate />} />
-      <Route path="/usrgenerate_view" element={<USRgenerate_view />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/dashboardr" element={<DashboardR />} />
-      <Route path="/signup" element={<SignUp />} />
-      <Route path="/sentences" element={<Sentences />} />
-      <Route path="/usrtablepath" element={<USR />} />
-      <Route path="/usredit" element={<USRV />} />
-    </Routes>
-
+    <div>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<ContactUs />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/logout" element={<Logout />} />
+        <Route path="/usrgenerate" element={<USRgenerate />} />
+        <Route path="/usrgenerate_view" element={<USRgenerate_view />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboardr" element={<DashboardR />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/sentences" element={<Sentences />} />
+        <Route path="/usrtablepath" element={<USR />} />
+        <Route path="/usredit" element={<USRV />} />
+      </Routes>
+    </div>
   );
 }
 
