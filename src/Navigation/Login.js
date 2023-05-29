@@ -3,11 +3,9 @@ import "./style.css";
 import { NavLink } from "react-router-dom";
 import Navbar from "./Navbar";
 import { useNavigate } from "react-router-dom";
-import customAxios from "../axios";
-
-import messages from '../constants/messages';
-
 import "./login_css.css"
+import customAxios from "../axios";
+import messages from '../constants/messages';
 import { storeIntoApplicationStorage } from "../utilities/storage";
 
 const Login = () => {
@@ -24,10 +22,10 @@ const Login = () => {
       const params = {
         email: formTarget.email.value,
         password: formTarget.password.value,
-        reviewer_role: formTarget.role.value
+        reviewer_role: formTarget.reviewer_role.value
       };
 
-      const result = await customAxios.post('api/login/', params);
+      const result = await customAxios.post('/login', params);
 
       if (result.response?.status === 401) {
         return alert(messages.invalidCredentials);
@@ -36,6 +34,12 @@ const Login = () => {
       if (result.status === 200) {
         alert(messages.loginSuccessfully);
         storeIntoApplicationStorage(result.data)
+        console.log(result.data['author_id'])
+        localStorage.setItem("author_name", result.data['author_name'])
+        localStorage.setItem("author_id", result.data['author_id'])
+        localStorage.setItem("email", result.data['email'])
+        localStorage.setItem("reviewer_role", result.data['reviewer_role'])
+
         return navigate('/dashboard');
       }
 
@@ -101,11 +105,11 @@ const Login = () => {
         </div>
 
         <div className="radio">
-          <input type="radio" id="a_role" name="role" value="author" />
-          <label for="author">Author</label>
+          <input type="radio" id="a_role" name="reviewer_role" value="Author" />
+          <label for="Author">Author</label>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <input type="radio" id="r_role" name="role" value="reviewer" />
-          <label for="reviewer">Reviewer</label>
+          <input type="radio" id="r_role" name="reviewer_role" value="Reviewer" />
+          <label for="reviewer_role">Reviewer</label>
         </div>
 
         <div className="adbutton">

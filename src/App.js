@@ -11,12 +11,9 @@ import Sentences from "./USRgenerationFolder/Sentences";
 import USR from "./USRgenerationFolder/USR";
 import USRV from "./USRgenerationFolder/USR_view";
 import { Routes, Route } from "react-router-dom";
-import Logout from "./Navigation/Logout";
 import USRgenerate_view from "./USRgenerationFolder/USRgenerate_view";
 import Navbar from "./Navigation/Navbar";
 
-import { storeIntoApplicationStorage, getApplicationStorage } from './utilities/storage';
-import customAxios from "./axios";
 
 function App() {
 
@@ -28,7 +25,6 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/logout" element={<Logout />} />
         <Route path="/usrgenerate" element={<USRgenerate />} />
         <Route path="/usrgenerate_view" element={<USRgenerate_view />} />
         <Route path="/dashboard" element={<Dashboard />} />

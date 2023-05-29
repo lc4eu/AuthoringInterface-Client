@@ -23,7 +23,7 @@ const Signup = () => {
         reviewer_role: formTarget.reviewer_role.value
       };
 
-      const result = await customAxios.post('api/signup/', params);
+      const result = await customAxios.post('/signup', params);
 
       if (result.status === 200) {
         alert(messages.signupSuccessfully);
@@ -88,29 +88,29 @@ const Signup = () => {
         <div class="field">
           <label for="email">Email</label>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <input id="email" type="text" name="email" required />
+          <input id="email" type="text" name="email" required />
         </div>
         <div class="field">
           <label for="password">Password</label>&nbsp;&nbsp;
-            <input id="password" type="password" name="password" required />
+          <input id="password" type="password" name="password" required />
         </div>
 
         <div class="radio2">
           <p>
-            Reviewer role:&nbsp;&nbsp;
-              <input
+            Reviewer Role:&nbsp;&nbsp;
+            <input
               type="radio"
               id="a_reviewer_role"
               name="reviewer_role"
-              value="Yes"
+              value="Reviewer"
             />
             <label for="reviewer_role">Yes</label>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <input
+            <input
               type="radio"
               id="r_reviewer_role"
               name="reviewer_role"
-              value="No"
+              value="Author"
             />
             <label for="reviewer_role">No</label>
           </p>

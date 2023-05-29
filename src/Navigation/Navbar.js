@@ -15,7 +15,6 @@ function Navbar(props) {
   const _session = getApplicationStorage();
 
   async function handleLogoutControlClick() {
-
     try {
 
       const result = await customAxios.get('/logout');
@@ -36,15 +35,15 @@ function Navbar(props) {
             <li style={{ display: "none" }}>
               <NavLink className="home_active" to="/">
                 Home
-            </NavLink>
+              </NavLink>
             </li>
           ) : (
-              <li>
-                <NavLink className="home_active" to="/">
-                  Home
-            </NavLink>
-              </li>
-            )}
+            <li>
+              <NavLink className="home_active" to="/">
+                Home
+              </NavLink>
+            </li>
+          )}
           {props.hideAbout ? null : (
             <li>
               <NavLink to="/about">About</NavLink>
@@ -60,11 +59,11 @@ function Navbar(props) {
               <NavLink to="/login">LOGIN</NavLink>
             </li>
           )}
-          {props.hideLogin ? null : (
+          {/* {props.hideLogin ? null : (
             <li>
               <NavLink to="/dashboard">Dashboard</NavLink>
             </li>
-          )}
+          )} */}
           {/* {props.hideUsrGenerate ? null : <li><NavLink to="/usrgenerate">Generate USR</NavLink></li>} */}
         </ul>
       </div>
@@ -84,7 +83,7 @@ function Navbar(props) {
           <li>
             <Button variant="contained" onClick={handleLogoutControlClick}>
               Logout
-              </Button>
+            </Button>
           </li>
         </ul>
       </div>

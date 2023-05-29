@@ -9,27 +9,32 @@ const Sentences = () => {
   const sentencesPerPage = 11;
   const [highlightedIndex, setHighlightedIndex] = useState(0);
   const [number, setNumber] = useState(0);
-  const [usrs, setUsrs] = useState()
+  // const [usrs, setUsrs] = useState()
 
-  const searchParams = new URLSearchParams(window.location.search);
-  const d_id = searchParams.get('discourse_id');
+  // const searchParams = new URLSearchParams(window.location.search);
+  // const d_id = searchParams.get('discourse_id');
+
+  // useEffect(() => {
+  //   axios.get('/specific_usrs/')
+  //     .then(response => setUsrs(response.data))
+  //     .catch(error => console.log(error));
+  // }, [])
+
 
   useEffect(() => {
-    axios.get('/specific_usrs/')
-      .then(response => setUsrs(response.data))
-      .catch(error => console.log(error));
-  }, [])
+    try {
+      const searchParams = new URLSearchParams(window.location.search);
+      const sentence = searchParams.get('discourse');
+      // const ending = /(?<=[।])/g;
+      const ending = /\।|\?|\||\./;
 
+      let value_in_array = sentence.split(ending);
+      setValueInArray(value_in_array);
+    }
+    catch (exception) {
+      console.log(exception)
+    }
 
-  useEffect(() => {
-    const searchParams = new URLSearchParams(window.location.search);
-    const sentence = searchParams.get('sentence');
-    // const ending = /(?<=[।])/g;
-    const ending = /\।|\?|\||\./;
-
-    let value_in_array = sentence.split(ending);
-    // let value_in_array = sentence.split([".", "?", "|", "।"]);
-    setValueInArray(value_in_array);
   }, []);
 
   const handleClick = (index, item) => {
@@ -55,10 +60,10 @@ const Sentences = () => {
       {selectedSentences.map((item, index) => (
         <p key={startIndex + index} style={{ backgroundColor: highlightedIndex === startIndex + index ? 'yellow' : 'white' }} onClick={event => handleClick(startIndex + index, item)}>
           {startIndex + index + 1}.
-          {/* {item} */}
-          <div class="tooltip">{item}
+          {item}
+          {/* <div class="tooltip">{item}
             <span class="tooltiptext">{usrs[0].orignal_USR_json}</span>
-          </div>
+          </div> */}
           {/* <a class="hover_text" data-tooltip={usrs[0].orignal_USR_json}>{item}</a> */}
         </p>
       ))}

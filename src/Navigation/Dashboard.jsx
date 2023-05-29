@@ -13,13 +13,17 @@ import Modal from 'react-modal';
 import axios from "axios";
 import { Pagination } from "@mui/material";
 
+
+
 var JSZip = require("jszip");
 
 const Dashboard = () => {
+
+  const navigate = useNavigate();
+
   let counter = 0;
   var counter2 = 0;
   var zip = new JSZip();
-  const [authdata, setauthadat] = useState([])
   const [unqdis, setunqdis] = useState([])
   const [carddata, setcarddata] = useState([])
   const [udata, setusrdata] = useState([])
@@ -102,15 +106,7 @@ const Dashboard = () => {
     }
   };
 
-  const auth = () => {
-    // fetch("/api/uniq_auth_id2")
-    //   .then(response => {
-    //     return response.json()
-    //   })
-    //   .then(dataautdet => {
-    //     setauthadat(dataautdet)
-    //   })
-  }
+
 
   const unidis = () => {
     fetch("/api/uniqu_dis")
@@ -145,7 +141,6 @@ const Dashboard = () => {
   useEffect(() => {
     usrdata()
     cardata()
-    auth()
     unidis()
   }, [])
 
@@ -153,6 +148,8 @@ const Dashboard = () => {
   const [discourseid, setDiscourseId] = useState([[]])
   // const url = `/usrgenerate_view?data=${ddata}`;
   const url = `/usrgenerate_view?did=${discourseid}`;
+
+
 
   const showUSR = (sentences, discourse_id, discourse_name) => {
     setDiscourseId(discourse_id)
@@ -174,6 +171,9 @@ const Dashboard = () => {
     setddata(JSON.stringify(d))
   }
 
+
+
+
   return (
     <>
 
@@ -186,10 +186,11 @@ const Dashboard = () => {
             <li>
               <NavLink to="/dashboard">
                 <FaUser></FaUser> {authdata.author_name}
+
               </NavLink>
             </li>
             <li>
-              <Button variant="contained">
+              <Button variant="contained" href="http://localhost:9999/logout">
                 Logout
               </Button>
             </li>
@@ -332,5 +333,3 @@ const Dashboard = () => {
   );
 };
 export default Dashboard;
-
-

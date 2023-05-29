@@ -164,11 +164,11 @@ a {
 }
 
 [data-tooltip]:hover {
-  /* position: relative; */
-   position: absolute;
+  position: relative;
+   /* position: absolute;
   z-index: 1;
   top: 100%;
-  left: 0px;
+  left: 0px; */
 
   /* margin-left: -60px; */
 }

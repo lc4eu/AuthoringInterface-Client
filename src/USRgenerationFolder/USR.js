@@ -19,16 +19,22 @@ const USR = () => {
 
   const [nounsData, setNounsData] = useState([]);
   const [speakersData, setSpeakersData] = useState([]);
+  const serverURl = process.env.REACT_APP_API_BASE_URL;
 
   let finalJson;
   let sentence_id = 0;
   let r_status;
 
   const handleChange = (event, key, index) => {
-    const newSelectedData = { ...selectedData };
-    newSelectedData[key][index] = event.target.value;
-    setSelectedData(newSelectedData);
-    console.log(newSelectedData)
+    try {
+      const newSelectedData = { ...selectedData };
+      newSelectedData[key][index] = event.target.value;
+      setSelectedData(newSelectedData);
+      console.log(newSelectedData)
+    }
+    catch (exception) {
+      console.log(exception)
+    }
   };
 
 
@@ -36,45 +42,61 @@ const USR = () => {
 
 
   const fetchData = () => {
-    fetch(`/api/orignal_usr_fetch/`)
-      .then(response => {
-        return response.json()
-      })
-      .then(data => {
-        setUsers(data)
-        const result = data
-        finalJson = result
-        const orobj = result[index].edited_usr.replaceAll("'", "\"")
-        r_status = result[index].status
-        setUsrid(result[index].usr_id);
-        console.log(usrid)
-        console.log(orobj)
-        const orignal_usr_json = JSON.parse(orobj);
-        setSelectedData(orignal_usr_json);
-        //setSelectedData(result[index].orignal_usr_json);
-        setLoading(false);
-        finalJson = result[index].edited_usr
-        // finalJson=String(result[index].orignal_usr_json.replaceAll("\"", "'"));
-        console.log("hiiii")
-        console.log(typeof finalJson)
-        setReviewStatus(r_status);
-      })
+    try {
+      fetch(`/api/orignal_usr_fetch/`)
+        .then(response => {
+          return response.json()
+        })
+        .then(data => {
+          setUsers(data)
+          const result = data
+          finalJson = result
+          const orobj = result[index].edited_usr.replaceAll("'", "\"")
+          r_status = result[index].status
+          setUsrid(result[index].usr_id);
+          console.log(usrid)
+          console.log(orobj)
+          const orignal_usr_json = JSON.parse(orobj);
+          setSelectedData(orignal_usr_json);
+          //setSelectedData(result[index].orignal_usr_json);
+          setLoading(false);
+          finalJson = result[index].edited_usr
+          // finalJson=String(result[index].orignal_usr_json.replaceAll("\"", "'"));
+          console.log("hiiii")
+          console.log(typeof finalJson)
+          setReviewStatus(r_status);
+        })
+    }
+    catch (exception) {
+      console.log(exception)
+    }
   }
 
-  useEffect(() => {
-    axios.get('semcateofnouns/')
-      .then(response => setNounsData(response.data))
-      .catch(error => console.log(error));
-    fetchData()
-  }, [index])
 
+  const getSemanticCategoryOptions = () => {
+    try {
+      axios
+        .get(`${serverURl}/semcateofnouns`)
+        .then(data => console.log(data))
+        .catch(error => console.log(error));
+    }
+    catch (exception) {
+      console.log(exception)
+    }
+  };
+  // getSemanticCategoryOptions();
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(window.location.search);
-    setDiscourseName(searchParams.get('discoursename'))
-    setReceivedItem(searchParams.get('receivedItem'))
-    const receivedIndex = searchParams.get("receivedindex") || 0;
-    setIndex(receivedIndex ? receivedIndex : 0);
+    try {
+      const searchParams = new URLSearchParams(window.location.search);
+      setDiscourseName(searchParams.get('discoursename'))
+      setReceivedItem(searchParams.get('receivedItem'))
+      const receivedIndex = searchParams.get("receivedindex") || 0;
+      setIndex(receivedIndex ? receivedIndex : 0);
+    }
+    catch (exception) {
+      console.log(exception)
+    }
   }, [index]);
 
   const viewTable = () => {
@@ -82,29 +104,34 @@ const USR = () => {
   }
 
   const saveChanges = () => {
-    let selectData = JSON.stringify(selectedData)
-    let ss = selectData.replaceAll("\"", "'")
-    console.log("Hi")
-    console.log(usrid)
+    try {
+      let selectData = JSON.stringify(selectedData)
+      let ss = selectData.replaceAll("\"", "'")
+      console.log("Hi")
+      console.log(usrid)
 
-    // console.log(selectedData)
-    // const jsonString = JSON.stringify(ss)
-    const body = {
-      finalJson: ss,
-      usrid: usrid
-    };
-    fetch('editusr/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    })
-      .then(console.log(finalJson))
-      .then(response => {
-        alert("Saved Successfully")
+      // console.log(selectedData)
+      // const jsonString = JSON.stringify(ss)
+      const body = {
+        finalJson: ss,
+        usrid: usrid
+      };
+      fetch('editusr/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
       })
-      .then(data => console.log(data))
-      .catch(error => console.error(error));
-    window.location.reload();
+        .then(console.log(finalJson))
+        .then(response => {
+          alert("Saved Successfully")
+        })
+        .then(data => console.log(data))
+        .catch(error => console.error(error));
+      window.location.reload();
+    }
+    catch (exception) {
+      console.log(exception)
+    }
   }
 
 
@@ -115,88 +142,108 @@ const USR = () => {
   };
 
   const updateDatabase = () => {
-    const body = {
-      status: "In Review",
-      usrid: usrid
-      // add other data required by the backend API
-    };
-    fetch('editstatus/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    })
-      .then(response => {
-        if (response.ok) {
-          alert("Status updated successfully");
-        } else {
-          alert("Failed to update status");
-        }
+    try {
+      const body = {
+        status: "In Review",
+        usrid: usrid
+        // add other data required by the backend API
+      };
+      fetch('editstatus/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
       })
-      .catch(error => {
-        alert("Failed to update status: " + error);
-      });
+        .then(response => {
+          if (response.ok) {
+            alert("Status updated successfully");
+          } else {
+            alert("Failed to update status");
+          }
+        })
+        .catch(error => {
+          alert("Failed to update status: " + error);
+        });
+    }
+    catch (exception) {
+      console.log(exception)
+    }
   };
 
 
   const saveDownload = () => {
-    saveChanges();
-    const keys = Object.keys(selectedData);
-    const values = keys.map(key => selectedData[key]);
-    const formattedData = values.map(value => value.map(val => {
-      if (typeof val === 'string') {
-        return val.replace('/"', '');
-      }
-    }).join(',')).join('\n');
-    const combinedData = "#" + receivedItem + '\n' + formattedData;
-    const blob = new Blob([combinedData], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = discourseName + "_" + index + ".txt";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    try {
+      saveChanges();
+      const keys = Object.keys(selectedData);
+      const values = keys.map(key => selectedData[key]);
+      const formattedData = values.map(value => value.map(val => {
+        if (typeof val === 'string') {
+          return val.replace('/"', '');
+        }
+      }).join(',')).join('\n');
+      const combinedData = "#" + receivedItem + '\n' + formattedData;
+      const blob = new Blob([combinedData], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = discourseName + "_" + index + ".txt";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+    catch (exception) {
+      console.log(exception)
+    }
   }
 
 
   const addColumn = (indx) => {
-    const shouldAdd = window.confirm('Are you sure you want to add a column?');
-    if (shouldAdd) {
-      const keys = Object.keys(selectedData);
-      const values = keys.map(key => selectedData[key]);
-      for (var i = 0; i < values.length - 2; i++) {
-        values[i].splice(indx, 0, "")
-      }
-      const data = keys.reduce((obj, key, index) => {
-        obj[key] = values[index];
-        return obj;
-      }, {});
+    try {
+      const shouldAdd = window.confirm('Are you sure you want to add a column?');
+      if (shouldAdd) {
+        const keys = Object.keys(selectedData);
+        const values = keys.map(key => selectedData[key]);
+        for (var i = 0; i < values.length - 2; i++) {
+          values[i].splice(indx, 0, "")
+        }
+        const data = keys.reduce((obj, key, index) => {
+          obj[key] = values[index];
+          return obj;
+        }, {});
 
-      const json = JSON.stringify(data);
-      console.log(json)
-      setSelectedData(json)
-      saveChanges();
+        const json = JSON.stringify(data);
+        console.log(json)
+        setSelectedData(json)
+        saveChanges();
+      }
+    }
+    catch (exception) {
+      console.log(exception)
     }
   }
 
   const deleteConcept = (indx) => {
-    const shouldDelete = window.confirm('Are you sure you want to delete this column?');
-    if (shouldDelete) {
-      const keys = Object.keys(selectedData);
-      const values = keys.map(key => selectedData[key]);
-      for (var i = 0; i < values.length - 2; i++) {
-        values[i].splice(indx, 1)
-      }
-      const data = keys.reduce((obj, key, index) => {
-        obj[key] = values[index];
-        return obj;
-      }, {});
+    try {
+      const shouldDelete = window.confirm('Are you sure you want to delete this column?');
+      if (shouldDelete) {
+        const keys = Object.keys(selectedData);
+        const values = keys.map(key => selectedData[key]);
+        for (var i = 0; i < values.length - 2; i++) {
+          values[i].splice(indx, 1)
+        }
+        const data = keys.reduce((obj, key, index) => {
+          obj[key] = values[index];
+          return obj;
+        }, {});
 
-      const json = JSON.stringify(data);
-      console.log(json)
-      setSelectedData(json)
-      saveChanges();
+        const json = JSON.stringify(data);
+        console.log(json)
+        setSelectedData(json)
+        saveChanges();
+      }
+    }
+    catch (exception) {
+      console.log(exception)
     }
   }
 

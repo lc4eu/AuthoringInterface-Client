@@ -5,7 +5,8 @@ const messages = {
   internalServerError: 'Internal Server Error. Try again later!',
   invalidEmailAddress: 'Invalid Email Address!',
   signupSuccessfully: 'Sign up Successfully!',
-  userWithThisEmailAlreadyExists: 'User with this email already exists'
+  userWithThisEmailAlreadyExists: 'User with this email already exists',
+  USRsGeneratedSuccessfully: 'USRs Generated Successfully!'
 };
 
 export default messages;
