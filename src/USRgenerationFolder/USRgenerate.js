@@ -217,7 +217,6 @@ const USRgenerate = () => {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        {localStorage.getItem("author_id")}
         <div className="entry_components">
           <div className="tta1">
             <p className="lab_discourse">Discourse</p>

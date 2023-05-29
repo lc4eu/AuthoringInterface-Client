@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import './usr.css';
 import axios from 'axios';
+import customAxios from "../axios";
+
 //import cjson from 'cjson';
 
 import Button from '@mui/material/Button';
@@ -16,88 +18,16 @@ const USR = () => {
   const [usrid, setUsrid] = useState('');
   const [discourseName, setDiscourseName] = useState("");
   const [receivedItem, setReceivedItem] = useState("");
-
   const [nounsData, setNounsData] = useState([]);
   const [speakersData, setSpeakersData] = useState([]);
+  const [users, setUsers] = useState([])
+
+
   const serverURl = process.env.REACT_APP_API_BASE_URL;
 
   let finalJson;
   let sentence_id = 0;
   let r_status;
-
-  const handleChange = (event, key, index) => {
-    try {
-      const newSelectedData = { ...selectedData };
-      newSelectedData[key][index] = event.target.value;
-      setSelectedData(newSelectedData);
-      console.log(newSelectedData)
-    }
-    catch (exception) {
-      console.log(exception)
-    }
-  };
-
-
-  const [users, setUsers] = useState([])
-
-
-  const fetchData = () => {
-    try {
-      fetch(`/api/orignal_usr_fetch/`)
-        .then(response => {
-          return response.json()
-        })
-        .then(data => {
-          setUsers(data)
-          const result = data
-          finalJson = result
-          const orobj = result[index].edited_usr.replaceAll("'", "\"")
-          r_status = result[index].status
-          setUsrid(result[index].usr_id);
-          console.log(usrid)
-          console.log(orobj)
-          const orignal_usr_json = JSON.parse(orobj);
-          setSelectedData(orignal_usr_json);
-          //setSelectedData(result[index].orignal_usr_json);
-          setLoading(false);
-          finalJson = result[index].edited_usr
-          // finalJson=String(result[index].orignal_usr_json.replaceAll("\"", "'"));
-          console.log("hiiii")
-          console.log(typeof finalJson)
-          setReviewStatus(r_status);
-        })
-    }
-    catch (exception) {
-      console.log(exception)
-    }
-  }
-
-
-  const getSemanticCategoryOptions = () => {
-    try {
-      axios
-        .get(`${serverURl}/semcateofnouns`)
-        .then(data => console.log(data))
-        .catch(error => console.log(error));
-    }
-    catch (exception) {
-      console.log(exception)
-    }
-  };
-  // getSemanticCategoryOptions();
-
-  useEffect(() => {
-    try {
-      const searchParams = new URLSearchParams(window.location.search);
-      setDiscourseName(searchParams.get('discoursename'))
-      setReceivedItem(searchParams.get('receivedItem'))
-      const receivedIndex = searchParams.get("receivedindex") || 0;
-      setIndex(receivedIndex ? receivedIndex : 0);
-    }
-    catch (exception) {
-      console.log(exception)
-    }
-  }, [index]);
 
   const viewTable = () => {
     setShowTable(true);
@@ -134,7 +64,31 @@ const USR = () => {
     }
   }
 
-
+  const saveDownload = () => {
+    try {
+      saveChanges();
+      const keys = Object.keys(selectedData);
+      const values = keys.map(key => selectedData[key]);
+      const formattedData = values.map(value => value.map(val => {
+        if (typeof val === 'string') {
+          return val.replace('/"', '');
+        }
+      }).join(',')).join('\n');
+      const combinedData = "#" + receivedItem + '\n' + formattedData;
+      const blob = new Blob([combinedData], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = discourseName + "_" + index + ".txt";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+    catch (exception) {
+      console.log(exception)
+    }
+  }
 
   const submitForReview = () => {
     setReviewStatus("In Review");
@@ -169,34 +123,6 @@ const USR = () => {
     }
   };
 
-
-  const saveDownload = () => {
-    try {
-      saveChanges();
-      const keys = Object.keys(selectedData);
-      const values = keys.map(key => selectedData[key]);
-      const formattedData = values.map(value => value.map(val => {
-        if (typeof val === 'string') {
-          return val.replace('/"', '');
-        }
-      }).join(',')).join('\n');
-      const combinedData = "#" + receivedItem + '\n' + formattedData;
-      const blob = new Blob([combinedData], { type: 'text/plain' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = discourseName + "_" + index + ".txt";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-    }
-    catch (exception) {
-      console.log(exception)
-    }
-  }
-
-
   const addColumn = (indx) => {
     try {
       const shouldAdd = window.confirm('Are you sure you want to add a column?');
@@ -212,7 +138,6 @@ const USR = () => {
         }, {});
 
         const json = JSON.stringify(data);
-        console.log(json)
         setSelectedData(json)
         saveChanges();
       }
@@ -237,7 +162,6 @@ const USR = () => {
         }, {});
 
         const json = JSON.stringify(data);
-        console.log(json)
         setSelectedData(json)
         saveChanges();
       }
@@ -247,11 +171,91 @@ const USR = () => {
     }
   }
 
+  const handleChange = (event, key, index) => {
+    try {
+      const newSelectedData = { ...selectedData };
+      newSelectedData[key][index] = event.target.value;
+      setSelectedData(newSelectedData);
+      console.log(newSelectedData)
+    }
+    catch (exception) {
+      console.log(exception)
+    }
+  };
+
+  async function fetchData(event) {
+    event.preventDefault()
+    try {
+      const result = await customAxios.post('/orignal_usr_fetch');
+
+      fetch(`/orignal_usr_fetch`)
+        .then(response => {
+          return response.json()
+        })
+        .then(data => {
+          setUsers(data)
+          const result = data
+          finalJson = result
+          const orobj = result[index].edited_usr.replaceAll("'", "\"")
+          r_status = result[index].status
+          setUsrid(result[index].usr_id);
+          console.log(usrid)
+          console.log(orobj)
+          const orignal_usr_json = JSON.parse(orobj);
+          setSelectedData(orignal_usr_json);
+          //setSelectedData(result[index].orignal_usr_json);
+          setLoading(false);
+          finalJson = result[index].edited_usr
+          // finalJson=String(result[index].orignal_usr_json.replaceAll("\"", "'"));
+          console.log("hiiii")
+          console.log(typeof finalJson)
+          setReviewStatus(r_status);
+        })
+    }
+    catch (exception) {
+      console.log(exception)
+    }
+  }
+
+  useEffect(() => {
+    try {
+      const fetchData = async () => {
+        try {
+          const { data: response } = await axios.get(`${serverURl}/semcateofnouns`);
+          setNounsData(response);
+        } catch (error) {
+          console.error(error.message);
+        }
+      }
+      fetchData();
+    }
+    catch (exception) {
+      console.log(exception)
+    }
+  }, [])
+
+  useEffect(() => {
+    try {
+      const fetchData = async () => {
+        try {
+          const searchParams = new URLSearchParams(window.location.search);
+          setDiscourseName(searchParams.get('discoursename'))
+          setReceivedItem(searchParams.get('receivedItem'))
+          const receivedIndex = searchParams.get("receivedindex") || 0;
+          setIndex(receivedIndex ? receivedIndex : 0);
+        } catch (error) {
+          console.error(error.message);
+        }
+      }
+      fetchData();
+    }
+    catch (exception) {
+      console.log(exception)
+    }
+  }, [index]);
+
   return (
-
-
     loading ? <div>Loading...</div> :
-
       <>
         <div className="usrBtnControls">
           {/* <input type="submit" className="usrEditButton" onClick={viewTable} value="Edit" />
@@ -259,7 +263,7 @@ const USR = () => {
  <input type="submit" className="usr_rev_Button" value="Submit for review" />
  <input type="text" value="In Edit" readonly/> */}
           <Button sx={{ margin: '5px' }} variant="contained" onClick={viewTable} disabled={reviewStatus === "In Review"}>Edit</Button>
-          <Button sx={{ margin: '5px' }} variant="contained" onClick={() => saveChanges()} disabled={reviewStatus === "In Review"}>Save</Button>
+          <Button sx={{ margin: '5px' }} variant="contained" onClick={() => fetchData()} disabled={reviewStatus === "In Review"}>Save</Button>
           <Button sx={{ margin: '5px' }} variant="contained" onClick={saveDownload}>Save & Download</Button>
           <Button sx={{ margin: '5px' }} variant="contained" onClick={submitForReview} disabled={reviewStatus === "In Review"}>Submit for Review</Button>
           <br></br><label htmlFor="status">Status:</label><input type="text" id="status" value={reviewStatus} readOnly />

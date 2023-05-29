@@ -15,18 +15,26 @@ import { Pagination } from "@mui/material";
 
 
 
+
 var JSZip = require("jszip");
 
 const Dashboard = () => {
 
   const navigate = useNavigate();
+  const serverURl = process.env.REACT_APP_API_BASE_URL;
+
 
   let counter = 0;
   var counter2 = 0;
   var zip = new JSZip();
-  const [unqdis, setunqdis] = useState([])
+  const [uniquediscourse, setuniquediscourse] = useState([])
   const [carddata, setcarddata] = useState([])
-  const [udata, setusrdata] = useState([])
+  const [usrdata, setusrdata] = useState([])
+  const [ddata, setddata] = useState([[]])
+  const [discourseid, setDiscourseId] = useState([[]])
+
+  // const url = `/usrgenerate_view?data=${ddata}`;
+  const url = `/usrgenerate_view?did=${discourseid}`;
 
 
   const inddown = (sent, usr_data, usr_id, discourse_name) => {
@@ -61,7 +69,7 @@ const Dashboard = () => {
     let usr_id = 0
     const ending = /(?<=[।]|.)/g;
     let arrsen = sentences.split(ending)
-    udata.map(user2 => {
+    usrdata.map(user2 => {
       return user2.discourse_id === discourse_id ? (
         <div className="down_content">
           {usrs = usrs + user2.orignal_USR_json}
@@ -107,47 +115,58 @@ const Dashboard = () => {
   };
 
 
-
-  const unidis = () => {
-    fetch("/api/uniqu_dis")
-      .then(response => {
-        return response.json()
-      })
-      .then(dataautdet => {
-        setunqdis(dataautdet)
-      })
-  }
-
-  const cardata = () => {
-    fetch("/api/card_data")
-      .then(response => {
-        return response.json()
-      })
-      .then(dataautdet => {
-        setcarddata(dataautdet)
-      })
-  }
-
-  const usrdata = () => {
-    fetch("/api/dashboard_data")
-      .then(response => {
-        return response.json()
-      })
-      .then(dataautdet => {
-        setusrdata(dataautdet)
-      })
-  }
-
   useEffect(() => {
-    usrdata()
-    cardata()
-    unidis()
+    try {
+      const fetchData = async () => {
+        try {
+          const { data: response } = await axios.get(`${serverURl}/dicourses_for_a_user/${localStorage.getItem("author_id")}`);
+          setuniquediscourse(response);
+        } catch (error) {
+          console.error(error.message);
+        }
+      }
+      fetchData();
+    }
+    catch (exception) {
+      console.log(exception)
+    }
   }, [])
 
-  const [ddata, setddata] = useState([[]])
-  const [discourseid, setDiscourseId] = useState([[]])
-  // const url = `/usrgenerate_view?data=${ddata}`;
-  const url = `/usrgenerate_view?did=${discourseid}`;
+  console.log(uniquediscourse)
+
+  useEffect(() => {
+    try {
+      const fetchData = async () => {
+        try {
+          const { data: response } = await axios.get(`${serverURl}/card_data/${localStorage.getItem("author_id")}`);
+          setcarddata(response);
+        } catch (error) {
+          console.error(error.message);
+        }
+      }
+      fetchData();
+    }
+    catch (exception) {
+      console.log(exception)
+    }
+  }, [])
+
+  useEffect(() => {
+    try {
+      const fetchData = async () => {
+        try {
+          const { data: response } = await axios.get(`${serverURl}/usr_corresponding_to_discourse/${localStorage.getItem("author_id")}`);
+          setusrdata(response);
+        } catch (error) {
+          console.error(error.message);
+        }
+      }
+      fetchData();
+    }
+    catch (exception) {
+      console.log(exception)
+    }
+  }, [])
 
 
 
@@ -155,7 +174,7 @@ const Dashboard = () => {
     setDiscourseId(discourse_id)
     let str = []
     let d = []
-    udata.map(usr => {
+    usrdata.map(usr => {
       return usr.discourse_id === discourse_id ? (
         <div className="show content">
           {str.push(usr.orignal_USR_json)}
@@ -171,39 +190,13 @@ const Dashboard = () => {
     setddata(JSON.stringify(d))
   }
 
-
-
-
   return (
     <>
-
-      {/* <nav>
-        <NavLink to="/">
-          <p>Authoring Interface</p>
-        </NavLink>
-        <div>
-          <ul id="navbar">
-            <li>
-              <NavLink to="/dashboard">
-                <FaUser></FaUser> {authdata.author_name}
-
-              </NavLink>
-            </li>
-            <li>
-              <Button variant="contained" href="http://localhost:9999/logout">
-                Logout
-              </Button>
-            </li>
-          </ul>
-        </div>
-      </nav> */}
-
-
       <div className="components">
         <div className="cards">
           <div id="card">{carddata.discourse_count} Discourses created</div>
           <div id="card">{carddata.usr_count} USRs Generated</div>
-          <div id="card">{carddata.app_count} Discourses Approved</div>
+          <div id="card">{carddata.approved_count} Discourses Approved</div>
           <div id="card">
             <a className="hover_text" href="http://localhost:3000/usrgenerate" data-tooltip="Click to add new discourse.">
               <FaPlusCircle size="50px" color="black"></FaPlusCircle>
@@ -233,9 +226,9 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {unqdis.length > 0 && (
+          {uniquediscourse.length > 0 && (
             <ol>
-              {unqdis.map(dis => (
+              {uniquediscourse.map(dis => (
                 <div className="dis_table_row">
                   <div className="dis_table_col_1">{counter += 1}</div>
                   <div className="dis_table_col_1">{dis.discourse_id}</div>
@@ -250,12 +243,12 @@ const Dashboard = () => {
                   </div>
 
                   <div className="dis_table_col_3">
-                    {udata.length > 0 && (
+                    {usrdata.length > 0 && (
                       <ul>
                         <div className="counter">
                           {counter2 = 0}
                         </div>
-                        {udata.map(user => {
+                        {usrdata.map(user => {
                           return user.discourse_id === dis.discourse_id ? (
                             <div className="usr_buttons">
                               {/* <a href={`/usrgenerate?view_sen=${dis.sentences} & view_dis_name=${dis.discourse_name} & view_usr=${dis.orignal_USR_json}`} class="hover_text" data-tooltip={format_json(user.orignal_USR_json)}>USR {counter2 += 1} </a> */}
