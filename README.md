@@ -1,70 +1,55 @@
-# Getting Started with Create React App
+# Setup for frontend -
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+1. Open a new terminal in VS Code. Make sure you are in the AuthoringInterface folder.
 
-## Available Scripts
+2. Install nodejs if you do not have it by running the following commands-<br/>
+      "sudo apt update"<br/>
+      "sudo apt install nodejs"<br/>
+      "node -v"<br/>
+      "sudo apt-get install npm"<br/>
+        
+    \*Note - If you get the following error - <br/>
+        "dpkg: error processing package mysql-server (--configure):dependency problems - leaving          unconfigured No apport report written because the error message indicates its a followup error from a previous failure.
+        Errors were encountered while processing:
+          mysql-server-8.0
+          mysql-server
+        E: Sub-process /usr/bin/dpkg returned an error code (1)"
+        
+      - Try the following solution -<br/>
+        "sudo apt-get remove --purge nodejs"<br/>
+        "sudo apt autoremove"<br/>
+      Repeat the commands of step 19 from beginning to setup node properly.
 
-In the project directory, you can run:
+3. Update the node to latest verison -<br/>
+    "sudo snap install curl"<br/>
+    "curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash -"<br/>
+    "sudo apt-get install -y nodejs"<br/>
+      \*Note - If you get error in this step, run the following command -<br/>
+      "sudo apt remove nodejs"<br/>
+      After you have have run the above command restart from step 19.
 
-### `npm start`
+4. Make sure you are in the AuthoringInderface directory. Now run the following command to get the frontend code.<br/>
+    "git clone https://github.com/v-a-r-s-h-a/client"<br/>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+5. A folder named client can be seen in the AuthoringInterface folder.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+6. Move inside the client folder with the following command -<br/>
+    "cd client"
 
-### `npm test`
+7. Make sure you are in the client folder. Install all the following dependencies -<br/>
+    - "npm i"
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+    \*Note - If you cannot install a dependecy add --legacy-peer-deps or "-force" to it as shown below - <br/>
+    "npm i -force"
 
-### `npm run build`
+8. Now you are in the client folder. Start the frontend with the following command -<br/>
+    "npm start"
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# To start the frontend run the following commands on another terminal - <br/>
+    "cd client" <br/>
+    "npm start"
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
