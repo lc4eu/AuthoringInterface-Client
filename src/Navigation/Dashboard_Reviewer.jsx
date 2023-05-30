@@ -2,17 +2,12 @@ import { NavLink, redirect } from "react-router-dom";
 import { FaDownload, FaEdit, FaEye, FaPlusCircle, FaTrash, FaUser } from "react-icons/fa";
 import "./dashboard_css.css";
 import Button from "@material-ui/core/Button";
-import Stack from '@mui/material/Stack';
 import { useState, useEffect, useRef } from 'react';
 import React from 'react';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { saveAs } from 'file-saver';
-import Modal from 'react-modal';
-import axios from "axios";
-import { Pagination } from "@mui/material";
-import { ErrorBoundary } from "react-error-boundary";
 
 
 
@@ -176,7 +171,7 @@ const Dashboard = () => {
 
   const handleButtonClick = () => {
     // Make an HTTP request to update the field in the backend
-    fetch('/api/update_status', {
+    fetch('/update_status', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

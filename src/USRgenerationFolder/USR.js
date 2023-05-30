@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import './usr.css';
 import axios from 'axios';
 import customAxios from "../axios";
+import messages from '../constants/messages';
 
 //import cjson from 'cjson';
 
 import Button from '@mui/material/Button';
-import { FaPlusCircle } from 'react-icons/fa';
 
 
 const USR = () => {
@@ -186,31 +186,53 @@ const USR = () => {
   async function fetchData(event) {
     event.preventDefault()
     try {
-      const result = await customAxios.post('/orignal_usr_fetch');
+      const result = await customAxios.get('/orignal_usr_fetch');
+      if (result.response?.status === 400) {
+        return alert(messages.somethingWentWrong);
+      }
 
-      fetch(`/orignal_usr_fetch`)
-        .then(response => {
-          return response.json()
-        })
-        .then(data => {
-          setUsers(data)
-          const result = data
-          finalJson = result
-          const orobj = result[index].edited_usr.replaceAll("'", "\"")
-          r_status = result[index].status
-          setUsrid(result[index].usr_id);
-          console.log(usrid)
-          console.log(orobj)
-          const orignal_usr_json = JSON.parse(orobj);
-          setSelectedData(orignal_usr_json);
-          //setSelectedData(result[index].orignal_usr_json);
-          setLoading(false);
-          finalJson = result[index].edited_usr
-          // finalJson=String(result[index].orignal_usr_json.replaceAll("\"", "'"));
-          console.log("hiiii")
-          console.log(typeof finalJson)
-          setReviewStatus(r_status);
-        })
+      if (result.status === 200) {
+        const usr_data = result.data
+        setUsers(usr_data)
+        const result = usr_data
+        finalJson = result
+        const orobj = result[index].edited_usr.replaceAll("'", "\"")
+        r_status = result[index].status
+        setUsrid(result[index].usr_id);
+        console.log(usrid)
+        console.log(orobj)
+        const orignal_usr_json = JSON.parse(orobj);
+        setSelectedData(orignal_usr_json);
+        //setSelectedData(result[index].orignal_usr_json);
+        setLoading(false);
+        finalJson = result[index].edited_usr
+        // finalJson=String(result[index].orignal_usr_json.replaceAll("\"", "'"));
+        setReviewStatus(r_status);
+      }
+
+      // fetch(`/orignal_usr_fetch`)
+      //   .then(response => {
+      //     return response.json()
+      //   })
+      //   .then(data => {
+      //     setUsers(data)
+      //     const result = data
+      //     finalJson = result
+      //     const orobj = result[index].edited_usr.replaceAll("'", "\"")
+      //     r_status = result[index].status
+      //     setUsrid(result[index].usr_id);
+      //     console.log(usrid)
+      //     console.log(orobj)
+      //     const orignal_usr_json = JSON.parse(orobj);
+      //     setSelectedData(orignal_usr_json);
+      //     //setSelectedData(result[index].orignal_usr_json);
+      //     setLoading(false);
+      //     finalJson = result[index].edited_usr
+      //     // finalJson=String(result[index].orignal_usr_json.replaceAll("\"", "'"));
+      //     console.log("hiiii")
+      //     console.log(typeof finalJson)
+      //     setReviewStatus(r_status);
+      //   })
     }
     catch (exception) {
       console.log(exception)

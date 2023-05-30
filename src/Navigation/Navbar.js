@@ -1,7 +1,6 @@
 import "./style.css";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FaUser } from "react-icons/fa";
-import { useState, useEffect } from 'react';
 import React from 'react';
 import Button from "@material-ui/core/Button";
 import { getApplicationStorage, clearApplicationStorage } from "../utilities/storage";

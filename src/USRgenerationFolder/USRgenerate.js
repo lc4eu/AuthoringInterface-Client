@@ -12,8 +12,6 @@ const USRgenerate = () => {
   const [receivedIndex, setReceivedIndex] = useState('');
   const [receivedItem, setReceivedItem] = useState('')
 
-
-
   window.addEventListener("message", receiveMessage, false);
 
   function receiveMessage(event) {
@@ -75,7 +73,6 @@ const USRgenerate = () => {
   async function handleFileSelection(event) {
     const file = event.target.files[0];
     const file_name = file.name.split('.')[0];
-    // setDiscourseName(handleDiscourseName())
     const reader = new FileReader();
     reader.onload = async (event) => {
       const content = event.target.result;
@@ -142,9 +139,10 @@ const USRgenerate = () => {
       const formTarget = event.target;
       const params = {
         sentences: sentences,
-        discourse_name: discourse_name,
+        discourse_name: file_name,
         jsondata: jsondata,
-        sentencearray: sentencearray
+        sentencearray: sentencearray,
+        author_id: localStorage.getItem("author_id")
       };
       const result = await customAxios.post('/fileinsert', params);
 

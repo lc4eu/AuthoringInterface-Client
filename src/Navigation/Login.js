@@ -1,7 +1,6 @@
 import React from "react";
 import "./style.css";
 import { NavLink } from "react-router-dom";
-import Navbar from "./Navbar";
 import { useNavigate } from "react-router-dom";
 import "./login_css.css"
 import customAxios from "../axios";
