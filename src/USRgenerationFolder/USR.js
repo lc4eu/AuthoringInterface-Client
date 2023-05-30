@@ -4,12 +4,14 @@ import axios from 'axios';
 import customAxios from "../axios";
 import messages from '../constants/messages';
 
+
 //import cjson from 'cjson';
 
 import Button from '@mui/material/Button';
 
 
 const USR = () => {
+  const [users, setUsers] = useState([])
   const [index, setIndex] = useState(0);
   const [selectedData, setSelectedData] = useState({});
   const [loading, setLoading] = useState(true);
@@ -18,22 +20,25 @@ const USR = () => {
   const [usrid, setUsrid] = useState('');
   const [discourseName, setDiscourseName] = useState("");
   const [receivedItem, setReceivedItem] = useState("");
+  const [discourseId, setDiscourseId] = useState('');
+  const [showUSREditTable, setshowUSREditTable] = useState(false);
+
   const [nounsData, setNounsData] = useState([]);
-  const [speakersData, setSpeakersData] = useState([]);
-  const [users, setUsers] = useState([])
-
-
-  const serverURl = process.env.REACT_APP_API_BASE_URL;
+  const [sentenceTData, setsentenceTData] = useState([]);
+  const [speakersviewData, setspeakersviewData] = useState([]);
+  const [depRelData, setDepRelData] = useState([]);
 
   let finalJson;
   let sentence_id = 0;
   let r_status;
 
+  const serverURl = process.env.REACT_APP_API_BASE_URL;
+
   const viewTable = () => {
     setShowTable(true);
   }
 
-  const saveChanges = () => {
+  const saveChanges = async () => {
     try {
       let selectData = JSON.stringify(selectedData)
       let ss = selectData.replaceAll("\"", "'")
@@ -42,22 +47,35 @@ const USR = () => {
 
       // console.log(selectedData)
       // const jsonString = JSON.stringify(ss)
-      const body = {
+      const params = {
         finalJson: ss,
-        usrid: usrid
+        usrid: usrid,
+        author_id: localStorage.getItem("author_id")
       };
-      fetch('editusr/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-      })
-        .then(console.log(finalJson))
-        .then(response => {
-          alert("Saved Successfully")
-        })
-        .then(data => console.log(data))
-        .catch(error => console.error(error));
-      window.location.reload();
+
+      const result = await customAxios.post('/editusr', params);
+
+      if (result.status === 200) {
+        alert(messages.savedSuccessfully);
+        return window.location.reload();
+      }
+
+      if (result.response?.status === 400) {
+        return alert(messages.somethingWentWrong);
+      }
+
+      // fetch('editusr/', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify(body)
+      // })
+      //   .then(console.log(finalJson))
+      //   .then(response => {
+      //     alert("Saved Successfully")
+      //   })
+      //   .then(data => console.log(data))
+      //   .catch(error => console.error(error));
+      // window.location.reload();
     }
     catch (exception) {
       console.log(exception)
@@ -95,28 +113,39 @@ const USR = () => {
     updateDatabase();
   };
 
-  const updateDatabase = () => {
+  const updateDatabase = async () => {
+
     try {
-      const body = {
+      const params = {
         status: "In Review",
-        usrid: usrid
-        // add other data required by the backend API
+        usrid: usrid,
+        author_id: localStorage.getItem("author_id")        // add other data required by the backend API
       };
-      fetch('editstatus/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-      })
-        .then(response => {
-          if (response.ok) {
-            alert("Status updated successfully");
-          } else {
-            alert("Failed to update status");
-          }
-        })
-        .catch(error => {
-          alert("Failed to update status: " + error);
-        });
+
+      const result = await customAxios.post('/editstatus', params);
+
+      if (result.status === 200) {
+        return alert(messages.statusUpdatedSuccessfully);
+      }
+
+      if (result.response?.status === 400) {
+        return alert(messages.failedToUpdateStatus);
+      }
+      // fetch('editstatus/', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify(body)
+      // })
+      //   .then(response => {
+      //     if (response.ok) {
+      //       alert("Status updated successfully");
+      //     } else {
+      //       alert("Failed to update status");
+      //     }
+      //   })
+      //   .catch(error => {
+      //     alert("Failed to update status: " + error);
+      //   });
     }
     catch (exception) {
       console.log(exception)
@@ -183,68 +212,104 @@ const USR = () => {
     }
   };
 
-  async function fetchData(event) {
-    event.preventDefault()
+  async function showUSRData() {
     try {
-      const result = await customAxios.get('/orignal_usr_fetch');
-      if (result.response?.status === 400) {
-        return alert(messages.somethingWentWrong);
-      }
-
+      const result = await customAxios.get(`/orignal_usr_fetch/${discourseId}`);
       if (result.status === 200) {
         const usr_data = result.data
         setUsers(usr_data)
-        const result = usr_data
-        finalJson = result
-        const orobj = result[index].edited_usr.replaceAll("'", "\"")
-        r_status = result[index].status
-        setUsrid(result[index].usr_id);
-        console.log(usrid)
-        console.log(orobj)
+        const usr_result = usr_data
+        finalJson = usr_result
+        // console.log("indexjbfd", index)
+        const orobj = usr_result[index].edited_usr.replaceAll("'", "\"")
+        r_status = usr_result[index].status
+        setUsrid(usr_result[index].usr_id);
         const orignal_usr_json = JSON.parse(orobj);
         setSelectedData(orignal_usr_json);
-        //setSelectedData(result[index].orignal_usr_json);
         setLoading(false);
-        finalJson = result[index].edited_usr
-        // finalJson=String(result[index].orignal_usr_json.replaceAll("\"", "'"));
+        finalJson = usr_result[index].edited_usr
         setReviewStatus(r_status);
       }
 
-      // fetch(`/orignal_usr_fetch`)
-      //   .then(response => {
-      //     return response.json()
-      //   })
-      //   .then(data => {
-      //     setUsers(data)
-      //     const result = data
-      //     finalJson = result
-      //     const orobj = result[index].edited_usr.replaceAll("'", "\"")
-      //     r_status = result[index].status
-      //     setUsrid(result[index].usr_id);
-      //     console.log(usrid)
-      //     console.log(orobj)
-      //     const orignal_usr_json = JSON.parse(orobj);
-      //     setSelectedData(orignal_usr_json);
-      //     //setSelectedData(result[index].orignal_usr_json);
-      //     setLoading(false);
-      //     finalJson = result[index].edited_usr
-      //     // finalJson=String(result[index].orignal_usr_json.replaceAll("\"", "'"));
-      //     console.log("hiiii")
-      //     console.log(typeof finalJson)
-      //     setReviewStatus(r_status);
-      //   })
+      if (result.response?.status === 400) {
+        return alert(messages.somethingWentWrong);
+      }
     }
     catch (exception) {
       console.log(exception)
     }
   }
+  // showUSRData();
+
+  useEffect(() => {
+    try {
+      // if (showUSREditTable) {
+      showUSRData();
+      // }
+    }
+    catch (exception) {
+      console.log(exception)
+    }
+  }, [])
+
 
   useEffect(() => {
     try {
       const fetchData = async () => {
         try {
-          const { data: response } = await axios.get(`${serverURl}/semcateofnouns`);
-          setNounsData(response);
+          const result = await axios.get(`${serverURl}/semcateofnouns`);
+          setNounsData(result.data);
+        } catch (error) {
+          console.error(error.message);
+        }
+      }
+      fetchData();
+    }
+    catch (exception) {
+      console.log(exception)
+    }
+  }, [])
+
+  useEffect(() => {
+    try {
+      const fetchData = async () => {
+        try {
+          const result = await axios.get(`${serverURl}/deprelation`);
+          setDepRelData(result.data);
+        } catch (error) {
+          console.error(error.message);
+        }
+      }
+      fetchData();
+    }
+    catch (exception) {
+      console.log(exception)
+    }
+  }, [])
+
+  useEffect(() => {
+    try {
+      const fetchData = async () => {
+        try {
+          const result = await axios.get(`${serverURl}/sentencetype`);
+          setsentenceTData(result.data);
+        } catch (error) {
+          console.error(error.message);
+        }
+      }
+      fetchData();
+    }
+    catch (exception) {
+      console.log(exception)
+    }
+  }, [])
+
+  useEffect(() => {
+    try {
+      const fetchData = async () => {
+        try {
+          const result = await axios.get(`${serverURl}/speakersview`);
+          setspeakersviewData(result.data);
         } catch (error) {
           console.error(error.message);
         }
@@ -262,6 +327,8 @@ const USR = () => {
         try {
           const searchParams = new URLSearchParams(window.location.search);
           setDiscourseName(searchParams.get('discoursename'))
+          setDiscourseId(searchParams.get('discourseid'))
+          setshowUSREditTable(searchParams.get('showUSREditTable'))
           setReceivedItem(searchParams.get('receivedItem'))
           const receivedIndex = searchParams.get("receivedindex") || 0;
           setIndex(receivedIndex ? receivedIndex : 0);
@@ -280,16 +347,11 @@ const USR = () => {
     loading ? <div>Loading...</div> :
       <>
         <div className="usrBtnControls">
-          {/* <input type="submit" className="usrEditButton" onClick={viewTable} value="Edit" />
- <input type="submit" className="usrEditButton" onClick={saveChanges} value="Save" />
- <input type="submit" className="usr_rev_Button" value="Submit for review" />
- <input type="text" value="In Edit" readonly/> */}
           <Button sx={{ margin: '5px' }} variant="contained" onClick={viewTable} disabled={reviewStatus === "In Review"}>Edit</Button>
-          <Button sx={{ margin: '5px' }} variant="contained" onClick={() => fetchData()} disabled={reviewStatus === "In Review"}>Save</Button>
+          <Button sx={{ margin: '5px' }} variant="contained" onClick={() => saveChanges()} disabled={reviewStatus === "In Review"}>Save</Button>
           <Button sx={{ margin: '5px' }} variant="contained" onClick={saveDownload}>Save & Download</Button>
           <Button sx={{ margin: '5px' }} variant="contained" onClick={submitForReview} disabled={reviewStatus === "In Review"}>Submit for Review</Button>
           <br></br><label htmlFor="status">Status:</label><input type="text" id="status" value={reviewStatus} readOnly />
-
         </div>
 
         {showTable && Object.keys(selectedData).length > 0 ? (
@@ -335,16 +397,6 @@ const USR = () => {
 
 
 
-              {/* <tr>
- <div className='headerdiv'><th>Index</th></div>
- {
- selectedData.Index.map((item,i) => {
- return <td><div className="headerdiv2"><input type='text' value={item} onChange={(event) => handleChange(event, 'Index', i)} disabled='True'/></div></td>
- }
- 
- )
- }
- </tr> */}
               <tr>
                 <div className='headerdiv'><th>Sem. Cat</th></div>
                 {
@@ -357,16 +409,11 @@ const USR = () => {
                             onChange={(event) => handleChange(event, 'SemCateOfNouns', i)}
                           >
                             <option value="" selected={item === ''}></option>
-                            <option value="anim" title="Animacy">anim</option>
-                            <option value="per" selected={item === 'per'} title="Person">per</option>
-                            <option value="org" selected={item === 'org'} title="Organization">org</option>
-                            <option value="mass" selected={item === 'mass'} title="Mass">mass</option>
-                            <option value="abs" selected={item === 'abs'} title="Abstract">abs</option>
-                            <option value="place" selected={item === 'place'} title="Place">place</option>
-                            <option value="dow" selected={item === 'dow'} title="Day of week">dow</option>
-                            <option value="moy" selected={item === 'moy'} title="Month of year">moy</option>
-                            <option value="yoc" selected={item === 'yoc'} title="Year of Century">yoc</option>
-                            <option value="ne" selected={item === 'ne'} title="Names of movies, medicine, cuisine, games, disease">ne</option>
+                            {nounsData.map((option) => (
+                              <option key={option.id} value={option.scn_value} selected={item === option.scn_value} title={option.scn_title}>
+                                {option.scn_value}
+                              </option>
+                            ))}
 
                           </select>
                         </div>
@@ -386,17 +433,6 @@ const USR = () => {
 
                 }
               </tr>
-              {/* <tr>
- <div className='headerdiv'><th>Dep-Rel</th></div>
- {
- selectedData.DepRel.map((item,i) => {
- return <td><div className="headerdiv2"><input type='text' value={item} onChange={(event) => handleChange(event, 'DepRel', i)}/></div></td>
- }
- 
- )
- }
- </tr> */}
-
 
               <tr>
                 <div className='headerdiv'><th>Dep-Rel</th></div>
@@ -433,52 +469,12 @@ const USR = () => {
                               newDepRel[i] = `${dep_index}:${newOption}`;
                               setSelectedData({ ...selectedData, DepRel: newDepRel });
                             }}>
-                            <option key="option_main" value="main" selected={option === "main"}>main</option>
-                            <option key="option_k1" value="k1" selected={option === "k1"}>kartaa(k1)</option>
-                            <option key="option_k2" value="k2" selected={option === "k2"}>k2</option>
-                            <option key="option_k3" value="k3" selected={option === "k3"}>k3</option>
-                            <option key="option_k4" value="k4" selected={option === "k4"}>k4</option>
-                            <option key="option_k5" value="k5" selected={option === "k5"}>k5</option>
-                            <option key="option_k7" value="k7" selected={option === "k7"}>k7</option>
-                            <option key="option_k1s" value="k1s" selected={option === "k1s"}>k1s</option>
-                            <option key="option_neg" value="neg" selected={option === "neg"}>neg</option>
-                            <option key="option_card" value="card" selected={option === "card"}>Cardinals(card)</option>
-                            <option key="option_ord" value="ord" selected={option === "ord"}>Ordinals(ord)</option>
-                            <option key="option_mod" value="mod" selected={option === "mod"}>Quality(mod)</option>
-                            <option key="option_krvn" value="krvn" selected={option === "krvn"}>krvn</option>
-                            <option key="option_rpk" value="rpk" selected={option === "rpk"}>rpk</option>
-                            <option key="option_rblak" value="rblak" selected={option === "rblak"}>rblak</option>
-                            <option key="option_rblpk" value="rblpk" selected={option === "rblpk"}>rblpk</option>
-                            <option key="option_k7p" value="k7p" selected={option === "k7p"}>k7p</option>
-                            <option key="option_k7t" value="k7t" selected={option === "k7t"}>k7t</option>
-                            <option key="option_rsm" value="rsm" selected={option === "rsm"}>rsm</option>
-                            <option key="option_rsma" value="rsma" selected={option === "rsma"}>rsma</option>
-                            <option key="option_rsk" value="rsk" selected={option === "rsk"}>rsk</option>
-                            <option key="option_rpk" value="rpk" selected={option === "rpk"}>rpk</option>
-                            <option key="option_rhh" value="rhh" selected={option === "rhh"}>rhh</option>
-                            <option key="option_ord" value="ord" selected={option === "ord"}>ord</option>
-                            <option key="option_rblsk" value="rblsk" selected={option === "rblsk"}>rblsk</option>
-                            <option key="option_ru" value="ru" selected={option === "ru"}>ru</option>
-                            <option key="option_rv" value="rv" selected={option === "rv"}>rv</option>
-                            <option key="option_rkl" value="rkl" selected={option === "rkl"}>rkl</option>
-                            <option key="option_rdl" value="rdl" selected={option === "rdl"}>rdl</option>
-                            <option key="option_rd" value="rd" selected={option === "rd"}>rd</option>
-                            <option key="option_rvks" value="rvks" selected={option === "rvks"}>rvks</option>
-                            <option key="option_rbks" value="rbks" selected={option === "rbks"}>rbks</option>
-                            <option key="option_pk1" value="pk1" selected={option === "pk1"}>pk1</option>
-                            <option key="option_jk1" value="jk1" selected={option === "jk1"}>jk1</option>
-                            <option key="option_mk1" value="mk1" selected={option === "mk1"}>mk1</option>
-                            <option key="option_k2g" value="k2g" selected={option === "k2g"}>k2g</option>
-                            <option key="option_k2s" value="k2s" selected={option === "k2s"}>k2s</option>
-                            <option key="option_k2p" value="k2p" selected={option === "k2p"}>k2p</option>
-                            <option key="option_k4a" value="k4a" selected={option === "k4a"}>k4a</option>
-                            <option key="option_k5prk" value="k5prk" selected={option === "k5prk"}>k5prk</option>
-                            <option key="option_r6" value="r6" selected={option === "r6"}>r6</option>
-                            <option key="option_quant" value="quant" selected={option === "quant"}>quant</option>
-                            <option key="option_dem" value="dem" selected={option === "dem"}>dem</option>
-                            <option key="option_intf" value="intf" selected={option === "intf"}>intf</option>
-                            <option key="option_re" value="re" selected={option === "re"}>re</option>
-                            <option key="option_vk2" value="vk2" selected={option === "vk2"}>vk2</option>
+                            <option value="" selected={item === ''}></option>
+                            {depRelData.map((option) => (
+                              <option key={option.dpr_id} value={option.dpr_value} selected={item === option.dpr_value} title={option.dpr_title}>
+                                {option.dpr_value}
+                              </option>
+                            ))}
                           </select>
                         </div>
                       </td>
@@ -510,13 +506,11 @@ const USR = () => {
                             onChange={(event) => handleChange(event, 'SpeakersView', i)}
                           >
                             <option value="" selected={item === ''}></option>
-                            <option value="respect" selected={item === 'respect'}>respect</option>
-                            <option value="def" selected={item === 'def'} title="definiteness">def</option>
-                            <option value="deic" selected={item === 'deic'} title="deicticity">deic</option>
-                            <option value="RPs" selected={item === 'RPs'} title="Relation particles or discourse particles">RPs</option>
-                            <option value="shdxe" selected={item === 'shdxe'} title="shadexe">[shade: xe_1]</option>
-                            <option value="shdle" selected={item === 'shdle'} title="shadele">[shade: le_1]</option>
-                            <option value="shdjA" selected={item === 'shdjA'} title="shadejA">[shade: jA_1]</option>
+                            {speakersviewData.map((option) => (
+                              <option key={option.spv_id} value={option.spv_value} selected={item === option.spv_value} title={option.spv_title}>
+                                {option.spv_value}
+                              </option>
+                            ))}
                           </select>
                         </div>
                       </td>
@@ -548,20 +542,16 @@ const USR = () => {
                         <div className="headerdiv2">
                           <select value={item} onChange={(event) => handleChange(event, 'SentenceType', i)}>
                             <option value="" selected={item === ''}></option>
-                            <option value="negative" selected={item === 'negative'}>negative</option>
-                            <option value="affirmative" selected={item === 'affirmative'}>affirmative</option>
-                            <option value="interrogative" selected={item === 'interrogative'}>interrogative</option>
-                            <option value="yn_interrogative" selected={item === 'yn_interrogative'}>yn_interrogative</option>
-                            <option value="imperative" selected={item === 'imperative'}>imperative</option>
-                            <option value="pass-affirmative" selected={item === 'pass-affirmative'}>pass-affirmative</option>
-                            <option value="pass-interrogative" selected={item === 'pass-interrogative'}>pass-interrogative</option>
+                            {sentenceTData.map((option) => (
+                              <option key={option.sen_id} value={option.sen_value} selected={item === option.sen_value} >
+                                {option.sen_value}
+                              </option>
+                            ))}
                           </select>
                         </div>
                       </td>
                     )
-                  }
-
-                  )
+                  })
                 }
               </tr>
 
@@ -577,7 +567,7 @@ const USR = () => {
               </tr>
             </table>
           </form >
-        ) :
+        ) : (
 
           <table>
             <tr>
@@ -689,7 +679,7 @@ const USR = () => {
               }
             </tr>
           </table>
-
+        )
         }
       </>
 

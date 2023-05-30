@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import customAxios from "../axios";
+import axios from 'axios';
 import messages from '../constants/messages';
 import { getApplicationStorage } from "../utilities/storage";
 
@@ -8,9 +9,13 @@ const _session = getApplicationStorage();
 const USRgenerate = () => {
   const [discourse, setDiscourse] = useState('');
   const [discourse_name, setDiscourseName] = useState('');
+  const [discourseId, setDiscourseId] = useState('');
   const [showIframe, setShowIframe] = useState(false);
   const [receivedIndex, setReceivedIndex] = useState('');
   const [receivedItem, setReceivedItem] = useState('')
+  const [showUSREditTable, setshowUSREditTable] = useState(false);
+
+  const serverURl = process.env.REACT_APP_API_BASE_URL;
 
   window.addEventListener("message", receiveMessage, false);
 
@@ -18,26 +23,7 @@ const USRgenerate = () => {
     const { index, item } = event.data;
     setReceivedIndex(index);
     setReceivedItem(item);
-    console.log(item);
   }
-
-  // const saveChanges = () => {
-  //   const body = {
-  //     sentences: sentences,
-  //     discourse_name: discourse_name
-  //   };
-  //   fetch('http://localhost:9999/usrgenerate', {
-  //     method: 'POST',
-  //     headers: { 'Content-Type': 'application/json' },
-  //     body: JSON.stringify(body)
-  //   })
-  //     .then(response => {
-  //       alert("USRs Generated Successfully")
-  //     })
-  //     .then(data => console.log(data))
-  //     .then(setShowIframe(true))
-  //     .catch(error => console.error(error));
-  // };
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -76,13 +62,10 @@ const USRgenerate = () => {
     const reader = new FileReader();
     reader.onload = async (event) => {
       const content = event.target.result;
-      // console.log('content:', content); 
       const lines = content.split('\n');
       const hashLines = lines.filter((line) => line.startsWith('#'));
       const sentencearray = lines.filter((line) => line.startsWith('#')).map((line) => line.replace('#', '').replace('\r', ''));
-      // console.log('sentencearray:', sentencearray)
       const sentences = hashLines.map((line) => line.substr(1).trim()).join(' ');
-      // console.log('sentences:', sentences);
       setDiscourseName(file_name);
       setDiscourse(sentences);
       setShowIframe(true);
@@ -145,21 +128,15 @@ const USRgenerate = () => {
         author_id: localStorage.getItem("author_id")
       };
       const result = await customAxios.post('/fileinsert', params);
-
+      setDiscourseId(result.data)
+      setshowUSREditTable(true)
       if (result.status === 200) {
         alert(messages.USRsGeneratedSuccessfully);
       }
 
-      // fetch('api/fileinsert/', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(body)
-      // })
-      //   .then(response => {
-      //     alert("Usr generated Successfully")
-      //   })
-      //   .then(data => console.log(data))
-      //   .catch(error => console.error(error));
+      if (result.response?.status === 400) {
+        return alert(messages.somethingWentWrong);
+      }
     };
     reader.readAsText(file);
   };
@@ -175,12 +152,14 @@ const USRgenerate = () => {
       };
       // console.log(author_id)
       const result = await customAxios.post("/usrgenerate", params);
+      setDiscourseId(result.data)
 
       if (result.status === 200) {
         alert(messages.USRsGeneratedSuccessfully);
         setDiscourse(discourse)
         setDiscourseName(discourse_name)
         setShowIframe(true)
+        setshowUSREditTable(true)
       }
       if (result.response?.status === 400) {
         return alert(messages.somethingWentWrong);
@@ -189,27 +168,27 @@ const USRgenerate = () => {
     catch (exception) {
       console.log(exception)
     }
-
-    // fetch('http://localhost:9999/usrgenerate', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Accept': 'application/json',
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify({ "sentences": discourse })
-    // })
-    //   .then(response => response.json())
-    //   .then(response => {
-    //     alert("Usr generated Successfully")
-    //   })
-    //   .then(response => console.log(JSON.stringify(response)))
-    //   .then(() => setShowIframe(true))
-    // // setTimeout(() => {
-
-    // // }, 5000);
-    // // setShowIframe(true);
-
   }
+
+  useEffect(() => {
+    try {
+      const fetchData = async () => {
+        const searchParams = new URLSearchParams(window.location.search);
+        if (searchParams.get('edit_from_dasboard')) {
+          let discourse_id = searchParams.get('dasboard_discourseid_for_edit')
+          const result = await axios.get(`${serverURl}/discourse/${discourse_id}`);
+          setDiscourseName(result.data["discourse_name"])
+          setDiscourse(result.data["sentences"])
+          setDiscourseId(result.data["discourse_id"])
+          setshowUSREditTable(true)
+        }
+      }
+      fetchData();
+    }
+    catch (exception) {
+      console.log(exception)
+    }
+  }, [])
 
 
   return (
@@ -232,7 +211,7 @@ const USRgenerate = () => {
         </div>
         <div className="frame_container">
           <iframe className="outl" width="500" height="540" title="sentence" src={`/sentences/?discourse=${discourse}`} />
-          <div className="usrtop"><iframe className="usr_usrtop" width="994px" id="usr" height="540" title="usr" src={`/usrtablepath?receivedindex=${receivedIndex}&discoursename=${discourse_name}&receivedItem=${receivedItem}`} /> </div>
+          <div className="usrtop"><iframe className="usr_usrtop" width="994px" id="usr" height="540" title="usr" src={`/usrtablepath?showUSREditTable=${showUSREditTable}&discourseid=${discourseId}&receivedindex=${receivedIndex}&discoursename=${discourse_name}&receivedItem=${receivedItem}`} /> </div>
         </div>
 
       </form>

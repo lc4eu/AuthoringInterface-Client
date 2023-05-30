@@ -6,7 +6,12 @@ const messages = {
   invalidEmailAddress: 'Invalid Email Address!',
   signupSuccessfully: 'Sign up Successfully!',
   userWithThisEmailAlreadyExists: 'User with this email already exists',
-  USRsGeneratedSuccessfully: 'USRs Generated Successfully!'
+  USRsGeneratedSuccessfully: 'USRs Generated Successfully!',
+  savedSuccessfully: 'Saved Successfully',
+  statusUpdatedSuccessfully: 'Status updated successfully',
+  failedToUpdateStatus: 'Failed to update status',
+  couldNotDeleteDiscourse: 'Could not delete the discourse!',
+  discourseDeletedSuccessfully: 'Discourse deleted successfully!'
 };
 
 export default messages;
