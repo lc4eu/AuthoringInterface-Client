@@ -45,9 +45,8 @@
 8. Now you are in the client folder. Start the frontend with the following command -<br/>
     "npm start"
 
-
 # To start the frontend run the following commands on another terminal - <br/>
-    "cd client" <br/>
+    "cd client" 
     "npm start"
 
 
