@@ -2,6 +2,7 @@ import React from "react";
 import Navbar from "./Navbar";
 import { useNavigate } from "react-router-dom";
 import "./login_css.css"
+import { NavLink } from "react-router-dom";
 
 import customAxios from "../axios";
 
@@ -119,6 +120,10 @@ const Signup = () => {
         <div class="adbutton">
           <button type="submit" value="SIGN UP" >SIGN UP</button>
         </div>
+
+        <p>
+          Already have an account?<NavLink to="/login">LOGIN</NavLink>
+        </p>
       </form>
     </div>
   );

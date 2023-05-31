@@ -3,10 +3,6 @@ import './usr.css';
 import axios from 'axios';
 import customAxios from "../axios";
 import messages from '../constants/messages';
-
-
-//import cjson from 'cjson';
-
 import Button from '@mui/material/Button';
 
 
@@ -43,6 +39,7 @@ const USR = () => {
       let selectData = JSON.stringify(selectedData)
       let ss = selectData.replaceAll("\"", "'")
       console.log("Hi")
+      console.log(ss)
       console.log(usrid)
 
       // console.log(selectedData)
@@ -50,6 +47,7 @@ const USR = () => {
       const params = {
         finalJson: ss,
         usrid: usrid,
+        discourseid: discourseId,
         author_id: localStorage.getItem("author_id")
       };
 
@@ -63,6 +61,7 @@ const USR = () => {
       if (result.response?.status === 400) {
         return alert(messages.somethingWentWrong);
       }
+      alert(messages.somethingWentWrong);
 
       // fetch('editusr/', {
       //   method: 'POST',
@@ -206,13 +205,14 @@ const USR = () => {
       newSelectedData[key][index] = event.target.value;
       setSelectedData(newSelectedData);
       console.log(newSelectedData)
+      console.log(selectedData)
     }
     catch (exception) {
       console.log(exception)
     }
   };
 
-  async function showUSRData() {
+  const showUSRData = async () => {
     try {
       const result = await customAxios.get(`/orignal_usr_fetch/${discourseId}`);
       if (result.status === 200) {
@@ -243,14 +243,14 @@ const USR = () => {
 
   useEffect(() => {
     try {
-      // if (showUSREditTable) {
-      showUSRData();
-      // }
+      if (showUSREditTable) {
+        showUSRData();
+      }
     }
     catch (exception) {
       console.log(exception)
     }
-  }, [])
+  }, [showUSRData, showUSREditTable])
 
 
   useEffect(() => {
@@ -268,7 +268,7 @@ const USR = () => {
     catch (exception) {
       console.log(exception)
     }
-  }, [])
+  }, [serverURl])
 
   useEffect(() => {
     try {
@@ -285,7 +285,7 @@ const USR = () => {
     catch (exception) {
       console.log(exception)
     }
-  }, [])
+  }, [serverURl])
 
   useEffect(() => {
     try {
@@ -302,7 +302,7 @@ const USR = () => {
     catch (exception) {
       console.log(exception)
     }
-  }, [])
+  }, [serverURl])
 
   useEffect(() => {
     try {
@@ -319,7 +319,7 @@ const USR = () => {
     catch (exception) {
       console.log(exception)
     }
-  }, [])
+  }, [serverURl])
 
   useEffect(() => {
     try {
@@ -357,230 +357,233 @@ const USR = () => {
         {showTable && Object.keys(selectedData).length > 0 ? (
           <form>
             <table >
-              <tr >
-                <div className='headerdiv'></div>
-                {
-                  selectedData.Concept.map((item, i) => {
-                    return <td key={i}><Button sx={{ margin: '5px' }} variant="contained" onClick={() => addColumn(i)}>Add a concept</Button></td>
-                  })
-                }
-
-              </tr>
-              <tr >
-                <div className='headerdiv'></div>
-                {
-                  selectedData.Concept.map((item, i) => {
-                    return <td key={i}><Button sx={{ margin: '5px' }} variant="contained" onClick={() => deleteConcept(i)}>Delete concept</Button></td>
-                  })
-                }
-              </tr>
-
-              <tr>
-                <div className='headerdiv'><th>Concept</th></div>
-                {
-                  selectedData.Concept.map((item, i) => {
-                    return <td><div className="headerdiv2"><input type="text" value={item} onChange={(event) => handleChange(event, 'Concept', i)} /></div></td>
+              <tbody>
+                <tr >
+                  <div className='headerdiv'></div>
+                  {
+                    selectedData.Concept.map((item, i) => {
+                      return <td key={i}><Button sx={{ margin: '5px' }} variant="contained" onClick={() => addColumn(i)}>Add a concept</Button></td>
+                    })
                   }
 
-                  )
-                }
-              </tr>
-
-              <tr>
-                <div className='headerdiv'><th>Index</th></div>
-                {
-                  Array.from({ length: selectedData.Concept.length }, (_, i) => i + 1).map((item, i) => {
-                    return <td><div className="headerdiv2"><input type='text' value={item} onChange={(event) => handleChange(event, 'Index', i)} disabled='True' /></div></td>
-                  })
-                }
-              </tr>
-
-
-
-              <tr>
-                <div className='headerdiv'><th>Sem. Cat</th></div>
-                {
-                  selectedData.SemCateOfNouns.map((item, i) => {
-                    return (
-                      <td>
-                        <div className="headerdiv2">
-                          <select
-                            value={item}
-                            onChange={(event) => handleChange(event, 'SemCateOfNouns', i)}
-                          >
-                            <option value="" selected={item === ''}></option>
-                            {nounsData.map((option) => (
-                              <option key={option.id} value={option.scn_value} selected={item === option.scn_value} title={option.scn_title}>
-                                {option.scn_value}
-                              </option>
-                            ))}
-
-                          </select>
-                        </div>
-                      </td>
-                    );
-                  })
-                }
-              </tr>
-              <tr>
-                <div className='headerdiv'><th>G-N-P</th></div>
-                {
-                  selectedData.GNP.map((item, i) => {
-                    return <td><div className="headerdiv2"><input type='text' value={item} onChange={(event) => handleChange(event, 'GNP', i)} /></div></td>
+                </tr>
+                <tr >
+                  <div className='headerdiv'></div>
+                  {
+                    selectedData.Concept.map((item, i) => {
+                      return <td key={i}><Button sx={{ margin: '5px' }} variant="contained" onClick={() => deleteConcept(i)}>Delete concept</Button></td>
+                    })
                   }
+                </tr>
 
-                  )
+                <tr>
+                  <th className='headerdiv'>Concept</th>
+                  {
+                    selectedData.Concept.map((item, i) => {
+                      return <td><div className="headerdiv2"><input type="text" value={item} onChange={(event) => handleChange(event, 'Concept', i)} /></div></td>
+                    }
 
-                }
-              </tr>
-
-              <tr>
-                <div className='headerdiv'><th>Dep-Rel</th></div>
-                {
-                  selectedData.DepRel.map((item, i) => {
-                    const [dep_index, option] = item.split(":"); // split the item into index and option
-                    return (
-                      <td>
-                        <div className="headerdiv2">
-                          <select
-                            class="usr_index_option"
-                            value={dep_index}
-                            onChange={(event) => {
-                              const new_dep_index = event.target.value;
-                              const newDepRel = [...selectedData.DepRel];
-                              newDepRel[i] = `${new_dep_index}:${option}`;
-                              setSelectedData({ ...selectedData, DepRel: newDepRel });
-                            }}
-                          >
-                            <option value="0" selected={Number(dep_index) === 0}>0</option>
-                            {
-                              Array.from({ length: selectedData.Concept.length }, (_, j) => j + 1).map((num) => (
-                                <option key={`index_${num}`} value={`${num}`} selected={num === Number(dep_index)}
-                                >
-                                  {num}
-                                </option>
-                              ))
-                            }
-                          </select>
-                          <select value={option}
-                            onChange={(event) => {
-                              const newOption = event.target.value;
-                              const newDepRel = [...selectedData.DepRel];
-                              newDepRel[i] = `${dep_index}:${newOption}`;
-                              setSelectedData({ ...selectedData, DepRel: newDepRel });
-                            }}>
-                            <option value="" selected={item === ''}></option>
-                            {depRelData.map((option) => (
-                              <option key={option.dpr_id} value={option.dpr_value} selected={item === option.dpr_value} title={option.dpr_title}>
-                                {option.dpr_value}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                      </td>
-                    );
-                  })
-                }
-              </tr>
-
-
-              <tr>
-                <div className='headerdiv'><th>Discourse</th></div>
-                {
-                  selectedData.Discourse.map((item, i) => {
-                    return <td><div className="headerdiv2"><input type='text' value={item} onChange={(event) => handleChange(event, 'Discourse', i)} /></div></td>
-                  }
-
-                  )
-                }
-              </tr>
-              <tr>
-                <div className='headerdiv'><th>Speaker's View</th></div>
-                {
-                  selectedData.SpeakersView.map((item, i) => {
-                    return (
-                      <td>
-                        <div className="headerdiv2">
-                          <select
-                            value={item}
-                            onChange={(event) => handleChange(event, 'SpeakersView', i)}
-                          >
-                            <option value="" selected={item === ''}></option>
-                            {speakersviewData.map((option) => (
-                              <option key={option.spv_id} value={option.spv_value} selected={item === option.spv_value} title={option.spv_title}>
-                                {option.spv_value}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                      </td>
-                    );
-
-
-
-                  }
-
-                  )
-                }
-              </tr>
-              <tr>
-                <div className='headerdiv'><th>Scope</th></div>
-                {
-                  selectedData.Scope.map((item, i) => {
-                    return <td><div className="headerdiv2"><input type='text' value={item} onChange={(event) => handleChange(event, 'Scope', i)} /></div></td>
-                  }
-
-                  )
-                }
-              </tr>
-              <tr>
-                <div className='headerdiv'><th>Sentence Type</th></div>
-                {
-                  selectedData.SentenceType.map((item, i) => {
-                    return (
-                      <td colSpan={selectedData.Concept.length}>
-                        <div className="headerdiv2">
-                          <select value={item} onChange={(event) => handleChange(event, 'SentenceType', i)}>
-                            <option value="" selected={item === ''}></option>
-                            {sentenceTData.map((option) => (
-                              <option key={option.sen_id} value={option.sen_value} selected={item === option.sen_value} >
-                                {option.sen_value}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                      </td>
                     )
-                  })
-                }
-              </tr>
-
-              <tr>
-                <div className='headerdiv'><th>Construction</th></div>
-                {
-                  selectedData.Construction.map((item, i) => {
-                    return <td colSpan={selectedData.Concept.length}><div className="headerdiv2"><input type='text' value={item} onChange={(event) => handleChange(event, 'Construction', i)} /></div></td>
                   }
+                </tr>
 
-                  )
-                }
-              </tr>
+                <tr>
+                  <th className='headerdiv'>Index</th>
+                  {
+                    Array.from({ length: selectedData.Concept.length }, (_, i) => i + 1).map((item, i) => {
+                      return <td><div className="headerdiv2"><input type='text' value={item} onChange={(event) => handleChange(event, 'Index', i)} disabled='True' /></div></td>
+                    })
+                  }
+                </tr>
+
+
+
+                <tr>
+                  <th className='headerdiv'>Sem. Cat</th>
+                  {
+                    selectedData.SemCateOfNouns.map((item, i) => {
+                      return (
+                        <td>
+                          <div className="headerdiv2">
+                            <select
+                              value={item}
+                              onChange={(event) => handleChange(event, 'SemCateOfNouns', i)}
+                            >
+                              <option value="" selected={item === ''}></option>
+                              {nounsData.map((option) => (
+                                <option key={option.id} value={option.scn_value} selected={item === option.scn_value} title={option.scn_title}>
+                                  {option.scn_value}
+                                </option>
+                              ))}
+
+                            </select>
+                          </div>
+                        </td>
+                      );
+                    })
+                  }
+                </tr>
+                <tr>
+                  <th className='headerdiv'>G-N-P</th>
+                  {
+                    selectedData.GNP.map((item, i) => {
+                      return <td><div className="headerdiv2"><input type='text' value={item} onChange={(event) => handleChange(event, 'GNP', i)} /></div></td>
+                    }
+
+                    )
+
+                  }
+                </tr>
+
+                <tr>
+                  <th className='headerdiv'>Dep-Rel</th>
+                  {
+                    selectedData.DepRel.map((item, i) => {
+                      const [dep_index, option] = item.split(":"); // split the item into index and option
+                      return (
+                        <td>
+                          <div className="headerdiv2">
+                            <select
+                              className="usr_index_option"
+                              value={dep_index}
+                              onChange={(event) => {
+                                const new_dep_index = event.target.value;
+                                const newDepRel = [...selectedData.DepRel];
+                                newDepRel[i] = `${new_dep_index}:${option}`;
+                                setSelectedData({ ...selectedData, DepRel: newDepRel });
+                              }}
+                            >
+                              <option value="0" selected={Number(dep_index) === 0}>0</option>
+                              {
+                                Array.from({ length: selectedData.Concept.length }, (_, j) => j + 1).map((num) => (
+                                  <option key={`index_${num}`} value={`${num}`} selected={num === Number(dep_index)}
+                                  >
+                                    {num}
+                                  </option>
+                                ))
+                              }
+                            </select>
+                            <select value={option}
+                              onChange={(event) => {
+                                const newOption = event.target.value;
+                                const newDepRel = [...selectedData.DepRel];
+                                newDepRel[i] = `${dep_index}:${newOption}`;
+                                setSelectedData({ ...selectedData, DepRel: newDepRel });
+                              }}>
+                              <option value="" selected={item === ''}></option>
+                              {depRelData.map((option) => (
+                                <option key={option.dpr_id} value={option.dpr_value} selected={item === option.dpr_value} title={option.dpr_title}>
+                                  {option.dpr_value}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        </td>
+                      );
+                    })
+                  }
+                </tr>
+
+
+                <tr>
+                  <th className='headerdiv'>Discourse</th>
+                  {
+                    selectedData.Discourse.map((item, i) => {
+                      return <td><div className="headerdiv2"><input type='text' value={item} onChange={(event) => handleChange(event, 'Discourse', i)} /></div></td>
+                    }
+
+                    )
+                  }
+                </tr>
+                <tr>
+                  <th className='headerdiv'>Speaker's View</th>
+                  {
+                    selectedData.SpeakersView.map((item, i) => {
+                      return (
+                        <td>
+                          <div className="headerdiv2">
+                            <select
+                              value={item}
+                              onChange={(event) => handleChange(event, 'SpeakersView', i)}
+                            >
+                              <option value="" selected={item === ''}></option>
+                              {speakersviewData.map((option) => (
+                                <option key={option.spv_id} value={option.spv_value} selected={item === option.spv_value} title={option.spv_title}>
+                                  {option.spv_value}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        </td>
+                      );
+
+
+
+                    }
+
+                    )
+                  }
+                </tr>
+                <tr>
+                  <th className='headerdiv'>Scope</th>
+                  {
+                    selectedData.Scope.map((item, i) => {
+                      return <td><div className="headerdiv2"><input type='text' value={item} onChange={(event) => handleChange(event, 'Scope', i)} /></div></td>
+                    }
+
+                    )
+                  }
+                </tr>
+                <tr>
+                  <th className='headerdiv'>Sentence Type</th>
+                  {
+                    selectedData.SentenceType.map((item, i) => {
+                      return (
+                        <td colSpan={selectedData.Concept.length}>
+                          <div className="headerdiv2">
+                            <select value={item} onChange={(event) => handleChange(event, 'SentenceType', i)}>
+                              <option value="" selected={item === ''}></option>
+                              {sentenceTData.map((option) => (
+                                <option key={option.sen_id} value={option.sen_value} selected={item === option.sen_value} >
+                                  {option.sen_value}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        </td>
+                      )
+                    })
+                  }
+                </tr>
+
+                <tr>
+                  <th className='headerdiv'>Construction</th>
+                  {
+                    selectedData.Construction.map((item, i) => {
+                      return <td colSpan={selectedData.Concept.length}><div className="headerdiv2"><input type='text' value={item} onChange={(event) => handleChange(event, 'Construction', i)} /></div></td>
+                    }
+
+                    )
+                  }
+                </tr>
+              </tbody>
             </table>
           </form >
         ) : (
 
           <table>
-            <tr>
-              <div className='headerdiv'><th>Concept</th></div>
-              {
-                selectedData.Concept.map((item, i) => {
-                  return <td><div className="headerdiv2">{item}</div></td>
-                }
+            <tbody>
+              <tr>
+                <th className='headerdiv'>Concept</th>
+                {
+                  selectedData.Concept.map((item, i) => {
+                    return <td><div className="headerdiv2">{item}</div></td>
+                  }
 
-                )
-              }
-            </tr>
-            {/* <tr>
+                  )
+                }
+              </tr>
+              {/* <tr>
  <div className='headerdiv'><th>Index</th></div>
  {
  selectedData.Index.map((item,i) => {
@@ -590,94 +593,95 @@ const USR = () => {
  )
  }
  </tr> */}
-            <tr>
-              <div className='headerdiv'><th>Index</th></div>
-              {
-                Array.from({ length: selectedData.Concept.length }, (_, i) => i + 1).map((item, i) => {
-                  return <td><div className="headerdiv2">{item}</div></td>
-                })
-              }
-            </tr>
-            <tr>
-              <div className='headerdiv'><th>Sem. Cat</th></div>
-              {
-                selectedData.SemCateOfNouns.map((item, i) => {
-                  return <td><div className="headerdiv2">{item}</div></td>
+              <tr>
+                <th className='headerdiv'>Index</th>
+                {
+                  Array.from({ length: selectedData.Concept.length }, (_, i) => i + 1).map((item, i) => {
+                    return <td><div className="headerdiv2">{item}</div></td>
+                  })
                 }
+              </tr>
+              <tr>
+                <th className='headerdiv'>Sem. Cat</th>
+                {
+                  selectedData.SemCateOfNouns.map((item, i) => {
+                    return <td><div className="headerdiv2">{item}</div></td>
+                  }
 
-                )
-              }
-            </tr>
-            <tr>
-              <div className='headerdiv'><th>G-N-P</th></div>
-              {
-                selectedData.GNP.map((item, i) => {
-                  return <td><div className="headerdiv2">{item}</div></td>
+                  )
                 }
+              </tr>
+              <tr>
+                <th className='headerdiv'>G-N-P</th>
+                {
+                  selectedData.GNP.map((item, i) => {
+                    return <td><div className="headerdiv2">{item}</div></td>
+                  }
 
-                )
-              }
-            </tr>
-            <tr>
-              <div className='headerdiv'><th>Dep-Rel</th></div>
-              {
-                selectedData.DepRel.map((item, i) => {
-                  return <td><div className="headerdiv2">{item}</div></td>
+                  )
                 }
+              </tr>
+              <tr>
+                <th className='headerdiv'>Dep-Rel</th>
+                {
+                  selectedData.DepRel.map((item, i) => {
+                    return <td><div className="headerdiv2">{item}</div></td>
+                  }
 
-                )
-              }
-            </tr>
-            <tr>
-              <div className='headerdiv'><th>Discourse</th></div>
-              {
-                selectedData.Discourse.map((item, i) => {
-                  return <td><div className="headerdiv2">{item}</div></td>
+                  )
                 }
+              </tr>
+              <tr>
+                <th className='headerdiv'>Discourse</th>
+                {
+                  selectedData.Discourse.map((item, i) => {
+                    return <td><div className="headerdiv2">{item}</div></td>
+                  }
 
-                )
-              }
-            </tr>
-            <tr>
-              <div className='headerdiv'><th>Speaker's View</th></div>
-              {
-                selectedData.SpeakersView.map((item, i) => {
-                  return <td><div className="headerdiv2">{item}</div></td>
+                  )
                 }
+              </tr>
+              <tr>
+                <th className='headerdiv'>Speaker's View</th>
+                {
+                  selectedData.SpeakersView.map((item, i) => {
+                    return <td><div className="headerdiv2">{item}</div></td>
+                  }
 
-                )
-              }
-            </tr>
-            <tr>
-              <div className='headerdiv'><th>Scope</th></div>
-              {
-                selectedData.Scope.map((item, i) => {
-                  return <td><div className="headerdiv2">{item}</div></td>
+                  )
                 }
+              </tr>
+              <tr>
+                <th className='headerdiv'>Scope</th>
+                {
+                  selectedData.Scope.map((item, i) => {
+                    return <td><div className="headerdiv2">{item}</div></td>
+                  }
 
-                )
-              }
-            </tr>
-            <tr>
-              <div className='headerdiv'><th>Sentence Type</th></div>
-              {
-                selectedData.SentenceType.map((item, i) => {
-                  return <td colSpan={selectedData.Concept.length}><div className="headerdiv2">{item}</div></td>
+                  )
                 }
+              </tr>
+              <tr>
+                <th className='headerdiv'>Sentence Type</th>
+                {
+                  selectedData.SentenceType.map((item, i) => {
+                    return <td colSpan={selectedData.Concept.length}><div className="headerdiv2">{item}</div></td>
+                  }
 
-                )
-              }
-            </tr>
-            <tr>
-              <div className='headerdiv'><th>Construction</th></div>
-              {
-                selectedData.Construction.map((item, i) => {
-                  return <td colSpan={selectedData.Concept.length}><div className="headerdiv2">{item}</div></td>
+                  )
                 }
+              </tr>
+              <tr>
+                <th className='headerdiv'>Construction</th>
+                {
+                  selectedData.Construction.map((item, i) => {
+                    return <td colSpan={selectedData.Concept.length}><div className="headerdiv2">{item}</div></td>
+                  }
 
-                )
-              }
-            </tr>
+                  )
+                }
+              </tr>
+            </tbody>
           </table>
         )
         }

@@ -14,6 +14,8 @@ const USRgenerate = () => {
   const [receivedIndex, setReceivedIndex] = useState('');
   const [receivedItem, setReceivedItem] = useState('')
   const [showUSREditTable, setshowUSREditTable] = useState(false);
+  const [hideUSRCreationButtons, sethideUSRCreationButtons] = useState(false)
+
 
   const serverURl = process.env.REACT_APP_API_BASE_URL;
 
@@ -155,7 +157,7 @@ const USRgenerate = () => {
       setDiscourseId(result.data)
 
       if (result.status === 200) {
-        alert(messages.USRsGeneratedSuccessfully);
+        alert(messages.AutomaticUSRsGeneratedSuccessfully);
         setDiscourse(discourse)
         setDiscourseName(discourse_name)
         setShowIframe(true)
@@ -190,6 +192,22 @@ const USRgenerate = () => {
     }
   }, [])
 
+  // async function hideUSRCreationConrolButton() {
+  //   try {
+  //     const searchParams = new URLSearchParams(window.location.search);
+  //     console.log(searchParams.get('hidecontrols'))
+  //     if (searchParams.get('hidecontrols')) {
+  //       return (
+
+  //       );
+  //     }
+  //     else {
+  //     }
+  //   }
+  //   catch (exception) {
+  //     console.log(exception)
+  //   }
+  // }
 
   return (
     <>
@@ -210,10 +228,9 @@ const USRgenerate = () => {
           </div>
         </div>
         <div className="frame_container">
-          <iframe className="outl" width="500" height="540" title="sentence" src={`/sentences/?discourse=${discourse}`} />
+          <iframe className="outl" width="500" height="540" title="sentence" src={`/sentences/?discourse=${discourse}&discourseid=${discourseId}`} />
           <div className="usrtop"><iframe className="usr_usrtop" width="994px" id="usr" height="540" title="usr" src={`/usrtablepath?showUSREditTable=${showUSREditTable}&discourseid=${discourseId}&receivedindex=${receivedIndex}&discoursename=${discourse_name}&receivedItem=${receivedItem}`} /> </div>
         </div>
-
       </form>
     </>
   )

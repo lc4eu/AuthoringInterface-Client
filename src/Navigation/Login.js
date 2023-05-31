@@ -33,7 +33,6 @@ const Login = () => {
       if (result.status === 200) {
         alert(messages.loginSuccessfully);
         storeIntoApplicationStorage(result.data)
-        console.log(result.data['author_id'])
         localStorage.setItem("author_name", result.data['author_name'])
         localStorage.setItem("author_id", result.data['author_id'])
         localStorage.setItem("email", result.data['email'])

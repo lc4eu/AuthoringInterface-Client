@@ -1,23 +1,49 @@
 import React, { useEffect, useState } from 'react';
 import Pagination from '@mui/material/Pagination';
-
+import messages from '../constants/messages';
+import customAxios from "../axios";
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 const Sentences = () => {
   const [value_in_array, setValueInArray] = useState([]);
   const [page, setPage] = useState(1);
   const sentencesPerPage = 11;
   const [highlightedIndex, setHighlightedIndex] = useState(0);
-  const [number, setNumber] = useState(0);
-  // const [usrs, setUsrs] = useState()
+  const [usrsForSenteces, setUsrsForSenteces] = useState()
 
-  // const searchParams = new URLSearchParams(window.location.search);
-  // const d_id = searchParams.get('discourse_id');
+  const settingUSRDataToSentences = (data) => {
+    console.log(data)
+    setUsrsForSenteces(data)
+    console.log(usrsForSenteces)
+  }
 
-  // useEffect(() => {
-  //   axios.get('/specific_usrs/')
-  //     .then(response => setUsrs(response.data))
-  //     .catch(error => console.log(error));
-  // }, [])
+  const getUsrForSentences = async () => {
+    try {
+      const searchParams = new URLSearchParams(window.location.search);
+      const discourse_id = searchParams.get('discourseid');
+      const result = await customAxios.get(`/usrs_for_a_discourse/${discourse_id}`);
+      if (result.status === 200) {
+        return settingUSRDataToSentences(result.data)
+      }
+
+      if (result.response?.status === 400) {
+        return alert(messages.somethingWentWrong);
+      }
+    }
+    catch (exception) {
+      console.log(exception)
+    }
+  };
+
+
+  useEffect(() => {
+    try {
+      // getUsrForSentences();
+    }
+    catch (exception) {
+      console.log(exception)
+    }
+  }, [getUsrForSentences])
 
 
   useEffect(() => {
@@ -48,6 +74,10 @@ const Sentences = () => {
     setPage(value);
   };
 
+  const handleCopyToClipboard = () => {
+    navigator.clipboard.writeText(window.location)
+  }
+
   const startIndex = (page - 1) * sentencesPerPage;
   const endIndex = startIndex + sentencesPerPage;
   const selectedSentences = value_in_array.slice(startIndex, endIndex);
@@ -60,10 +90,12 @@ const Sentences = () => {
         <p key={startIndex + index} style={{ backgroundColor: highlightedIndex === startIndex + index ? 'yellow' : 'white' }} onClick={event => handleClick(startIndex + index, item)}>
           {startIndex + index + 1}.
           {item}
-          {/* <div class="tooltip">{item}
-            <span class="tooltiptext">{usrs[0].orignal_USR_json}</span>
+          {/* <div class="idtooltip">{startIndex + index + 1}.
+            <span class="idtooltiptext">{usrsForSenteces[index]['USR_ID']}<ContentCopyIcon onClick={handleCopyToClipboard}></ContentCopyIcon></span>
+          </div>
+          <div class="tooltip">{item}
+            <span class="tooltiptext"><ContentCopyIcon onClick={handleCopyToClipboard}></ContentCopyIcon><br></br>{usrsForSenteces[index]['orignal_USR_json']}</span>
           </div> */}
-          {/* <a class="hover_text" data-tooltip={usrs[0].orignal_USR_json}>{item}</a> */}
         </p>
       ))}
       <div className='alignPagination'>

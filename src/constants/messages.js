@@ -6,6 +6,7 @@ const messages = {
   invalidEmailAddress: 'Invalid Email Address!',
   signupSuccessfully: 'Sign up Successfully!',
   userWithThisEmailAlreadyExists: 'User with this email already exists',
+  AutomaticUSRsGeneratedSuccessfully: 'Automatic USRs Generated Successfully',
   USRsGeneratedSuccessfully: 'USRs Generated Successfully!',
   savedSuccessfully: 'Saved Successfully',
   statusUpdatedSuccessfully: 'Status updated successfully',

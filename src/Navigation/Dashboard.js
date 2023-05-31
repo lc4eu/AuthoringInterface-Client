@@ -25,6 +25,7 @@ const Dashboard = () => {
   const [uniquediscourse, setuniquediscourse] = useState([])
   const [carddata, setcarddata] = useState([])
   const [usrdata, setusrdata] = useState([])
+
   const navigate = useNavigate();
 
 
@@ -170,7 +171,6 @@ const Dashboard = () => {
     }
   }, [])
 
-
   return (
     <>
       <div className="components">
@@ -263,14 +263,13 @@ const Dashboard = () => {
                   </div>
                   <div className="dis_table_col_4">
                     <button className="but">
-                      <div className="hover_text" data-tooltip="Click to view the discourse." >
-                        <Link to={`/usrgenerate?dasboard_discourseid_for_edit=${dis.discourse_id}&edit_from_dasboard=${true}`}><FaEye id="action_button" size="20px" color="black"></FaEye></Link>
+                      <div className="hover_text" data-tooltip="Click to view the discourse.">
+                        <Link to={`/usrgenerate?hidecontrols=${true}&dasboard_discourseid_for_edit=${dis.discourse_id}&edit_from_dasboard=${true}`}><FaEye id="action_button" size="20px" color="black"></FaEye></Link>
                       </div>
                     </button>
                     <button className="but">
                       <div className="hover_text" data-tooltip="Click to view the discourse." >
-                        {/* <Link to={url}></Link> */}
-                        <FaEdit id="action_button" size="20px" color="black"></FaEdit>
+                        <Link to={`/usrgenerate?hidecontrols=${false}&dasboard_discourseid_for_edit=${dis.discourse_id}&edit_from_dasboard=${true}`}><FaEdit id="action_button" size="20px" color="black"></FaEdit></Link>
                       </div>
                     </button>
 
