@@ -4,26 +4,25 @@ import messages from '../constants/messages';
 import customAxios from "../axios";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
+
 const Sentences = () => {
   const [value_in_array, setValueInArray] = useState([]);
   const [page, setPage] = useState(1);
   const sentencesPerPage = 11;
   const [highlightedIndex, setHighlightedIndex] = useState(0);
   const [usrsForSenteces, setUsrsForSenteces] = useState()
+  const [showUSREditTable, setshowUSREditTable] = useState(false);
 
-  const settingUSRDataToSentences = (data) => {
-    console.log(data)
-    setUsrsForSenteces(data)
-    console.log(usrsForSenteces)
-  }
 
   const getUsrForSentences = async () => {
     try {
       const searchParams = new URLSearchParams(window.location.search);
       const discourse_id = searchParams.get('discourseid');
       const result = await customAxios.get(`/usrs_for_a_discourse/${discourse_id}`);
+
       if (result.status === 200) {
-        return settingUSRDataToSentences(result.data)
+        setUsrsForSenteces(result.data)
+        console.log(usrsForSenteces)
       }
 
       if (result.response?.status === 400) {
@@ -35,15 +34,17 @@ const Sentences = () => {
     }
   };
 
-
   useEffect(() => {
     try {
-      // getUsrForSentences();
+      if (showUSREditTable) {
+        getUsrForSentences();
+        setshowUSREditTable(false)
+      }
     }
     catch (exception) {
       console.log(exception)
     }
-  }, [getUsrForSentences])
+  }, [getUsrForSentences, showUSREditTable])
 
 
   useEffect(() => {
@@ -67,7 +68,6 @@ const Sentences = () => {
       setHighlightedIndex(index);
       window.parent.postMessage({ index, item }, '*');
     }, 500);
-    console.log(index);
   };
 
   const handleChangePage = (event, value) => {
@@ -90,6 +90,7 @@ const Sentences = () => {
         <p key={startIndex + index} style={{ backgroundColor: highlightedIndex === startIndex + index ? 'yellow' : 'white' }} onClick={event => handleClick(startIndex + index, item)}>
           {startIndex + index + 1}.
           {item}
+
           {/* <div class="idtooltip">{startIndex + index + 1}.
             <span class="idtooltiptext">{usrsForSenteces[index]['USR_ID']}<ContentCopyIcon onClick={handleCopyToClipboard}></ContentCopyIcon></span>
           </div>

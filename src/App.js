@@ -8,15 +8,18 @@ import USRgenerate from "./USRgenerationFolder/USRgenerate";
 import SignUp from "./Navigation/Signup";
 import Sentences from "./USRgenerationFolder/Sentences";
 import USR from "./USRgenerationFolder/USR";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Router } from "react-router-dom";
 import Navbar from "./Navigation/Navbar";
+import ShowNavbar from "./Navigation/ShowNavbar";
 
 
 function App() {
 
   return (
     <div>
-      <Navbar />
+      <ShowNavbar>
+        <Navbar />
+      </ShowNavbar>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
@@ -28,6 +31,7 @@ function App() {
         <Route path="/sentences" element={<Sentences />} />
         <Route path="/usrtablepath" element={<USR />} />
       </Routes>
+
     </div>
   );
 }

@@ -38,12 +38,7 @@ const USR = () => {
     try {
       let selectData = JSON.stringify(selectedData)
       let ss = selectData.replaceAll("\"", "'")
-      console.log("Hi")
-      console.log(ss)
-      console.log(usrid)
 
-      // console.log(selectedData)
-      // const jsonString = JSON.stringify(ss)
       const params = {
         finalJson: ss,
         usrid: usrid,
@@ -204,8 +199,6 @@ const USR = () => {
       const newSelectedData = { ...selectedData };
       newSelectedData[key][index] = event.target.value;
       setSelectedData(newSelectedData);
-      console.log(newSelectedData)
-      console.log(selectedData)
     }
     catch (exception) {
       console.log(exception)
@@ -239,12 +232,12 @@ const USR = () => {
       console.log(exception)
     }
   }
-  // showUSRData();
 
   useEffect(() => {
     try {
       if (showUSREditTable) {
         showUSRData();
+        setshowUSREditTable(false)
       }
     }
     catch (exception) {

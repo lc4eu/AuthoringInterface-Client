@@ -190,7 +190,7 @@ const USRgenerate = () => {
     catch (exception) {
       console.log(exception)
     }
-  }, [])
+  }, [serverURl])
 
   // async function hideUSRCreationConrolButton() {
   //   try {
@@ -228,7 +228,7 @@ const USRgenerate = () => {
           </div>
         </div>
         <div className="frame_container">
-          <iframe className="outl" width="500" height="540" title="sentence" src={`/sentences/?discourse=${discourse}&discourseid=${discourseId}`} />
+          <iframe className="outl" width="500" height="540" title="sentence" src={`/sentences/?showUSREditTable=${showUSREditTable}&discourse=${discourse}&discourseid=${discourseId}`} />
           <div className="usrtop"><iframe className="usr_usrtop" width="994px" id="usr" height="540" title="usr" src={`/usrtablepath?showUSREditTable=${showUSREditTable}&discourseid=${discourseId}&receivedindex=${receivedIndex}&discoursename=${discourse_name}&receivedItem=${receivedItem}`} /> </div>
         </div>
       </form>
