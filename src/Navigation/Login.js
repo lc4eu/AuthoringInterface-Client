@@ -37,6 +37,8 @@ const Login = () => {
         localStorage.setItem("author_id", result.data['author_id'])
         localStorage.setItem("email", result.data['email'])
         localStorage.setItem("reviewer_role", result.data['reviewer_role'])
+        localStorage.setItem("in_session", true)
+
 
         return navigate('/dashboard');
       }

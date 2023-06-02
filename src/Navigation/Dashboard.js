@@ -209,8 +209,8 @@ const Dashboard = () => {
 
           {uniquediscourse.length > 0 && (
             <ol>
-              {uniquediscourse.map(dis => (
-                <div className="dis_table_row">
+              {uniquediscourse.map((dis, index) => (
+                <div key={index} className="dis_table_row">
                   <div className="dis_table_col_1">{SNo += 1}</div>
                   <div className="dis_table_col_1">{dis.discourse_id}</div>
                   <div className="dis_table_col_2">
@@ -229,9 +229,9 @@ const Dashboard = () => {
                         <div className="counter">
                           {USR_SNo = 0}
                         </div>
-                        {usrdata.map(user => {
+                        {usrdata.map((user, i) => {
                           return user.discourse_id === dis.discourse_id ? (
-                            <div className="usr_buttons">
+                            <div key={i} className="usr_buttons">
                               {/* <a href={`/usrgenerate?view_sen=${dis.sentences} & view_dis_name=${dis.discourse_name} & view_usr=${dis.orignal_USR_json}`} class="hover_text" data-tooltip={format_json(user.orignal_USR_json)}>USR {counter2 += 1} </a> */}
                               <Popup trigger=
                                 {<a className="hover_text">USR {USR_SNo += 1} </a>}

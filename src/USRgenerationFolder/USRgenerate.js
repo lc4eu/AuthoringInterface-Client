@@ -2,9 +2,7 @@ import React, { useEffect, useState } from 'react'
 import customAxios from "../axios";
 import axios from 'axios';
 import messages from '../constants/messages';
-import { getApplicationStorage } from "../utilities/storage";
 
-const _session = getApplicationStorage();
 
 const USRgenerate = () => {
   const [discourse, setDiscourse] = useState('');
@@ -121,7 +119,6 @@ const USRgenerate = () => {
 
       console.log('jsondata:', jsondata);
 
-      const formTarget = event.target;
       const params = {
         sentences: sentences,
         discourse_name: file_name,
@@ -146,7 +143,6 @@ const USRgenerate = () => {
   async function handleAutomaticGeneratedUSRs(event) {
     event.preventDefault()
     try {
-      const formTarget = event.target;
       const params = {
         discourse: discourse,
         discourse_name: discourse_name,
@@ -154,10 +150,10 @@ const USRgenerate = () => {
       };
       // console.log(author_id)
       const result = await customAxios.post("/usrgenerate", params);
-      setDiscourseId(result.data)
 
       if (result.status === 200) {
         alert(messages.AutomaticUSRsGeneratedSuccessfully);
+        setDiscourseId(result.data)
         setDiscourse(discourse)
         setDiscourseName(discourse_name)
         setShowIframe(true)

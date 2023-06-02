@@ -11,6 +11,8 @@ import USR from "./USRgenerationFolder/USR";
 import { Routes, Route, Router } from "react-router-dom";
 import Navbar from "./Navigation/Navbar";
 import ShowNavbar from "./Navigation/ShowNavbar";
+import USRSeperatorMerger from "./USRgenerationFolder/USRSeperatorMerger";
+import UserProfile from "./Navigation/UserProfile";
 
 
 function App() {
@@ -30,6 +32,8 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/sentences" element={<Sentences />} />
         <Route path="/usrtablepath" element={<USR />} />
+        <Route path="/usrsepmer" element={<USRSeperatorMerger />} />
+        <Route path="/userprofile" element={<UserProfile />} />
       </Routes>
 
     </div>

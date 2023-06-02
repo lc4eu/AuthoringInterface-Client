@@ -4,6 +4,10 @@ import axios from 'axios';
 import customAxios from "../axios";
 import messages from '../constants/messages';
 import Button from '@mui/material/Button';
+import ConceptListPopup from './ConceptListPopup';
+import { listClasses } from '@mui/material';
+import Popup from 'reactjs-popup';
+
 
 
 const USR = () => {
@@ -336,6 +340,61 @@ const USR = () => {
     }
   }, [index]);
 
+
+  const [conceptList, setConceptList] = useState([])
+  const newConceptList = [
+    "kuCa_1:some_2",
+    "kuCa_2:few_5",
+    "kuCa_3:something_1",
+    "kuCa_6:something_1",
+    "kuCa_4:money_11",
+    "kuCa_5:somewhat_5",
+    "kuCa_7:little_1",
+    "kuCa_8:slight_12",
+  ]
+
+
+  async function suggestConcept(event, key, index) {
+    try {
+      const params = {
+        concept: selectedData[key][index]
+      };
+      const result = await customAxios.post('/suggestedConcept', params);
+
+      if (result.status === 200) {
+
+        for (var x = 0; x < result.data.length; x++) {
+          newConceptList[x] = result.data[x]
+        }
+        console.log(newConceptList)
+        setConceptList(newConceptList)
+        console.log(conceptList)
+
+      }
+
+      if (result.response?.status == 400) {
+        return alert(messages.couldNotFetchConcepts)
+      }
+    }
+    catch (exception) {
+      console.log(exception)
+    }
+  }
+
+
+  const [selectedOption, setSelectedOption] = useState('');
+
+  const handleSelectOption = (option) => {
+    setSelectedOption(option);
+    const shouldChangeConcept = window.confirm('Are you sure you want to choose this concept?');
+    if (shouldChangeConcept) {
+      const newSelectedData = { ...selectedData };
+      newSelectedData["Concept"][0] = selectedOption;
+      setSelectedData(newSelectedData);
+    }
+  };
+
+
   return (
     loading ? <div>Loading...</div> :
       <>
@@ -369,6 +428,20 @@ const USR = () => {
                   }
                 </tr>
 
+                <tr >
+                  <div className='headerdiv'></div>
+                  {
+                    selectedData.Concept.map((item, i) => {
+                      return (<td key={i} onClick={(event) => suggestConcept(event, "Concept", i)} >
+                        <ConceptListPopup
+                          options={newConceptList}
+                          onSelect={handleSelectOption}
+                        />
+                      </td>)
+                    })
+                  }
+                </tr>
+
                 <tr>
                   <th className='headerdiv'>Concept</th>
                   {
@@ -388,8 +461,6 @@ const USR = () => {
                     })
                   }
                 </tr>
-
-
 
                 <tr>
                   <th className='headerdiv'>Sem. Cat</th>
@@ -416,6 +487,7 @@ const USR = () => {
                     })
                   }
                 </tr>
+
                 <tr>
                   <th className='headerdiv'>G-N-P</th>
                   {
@@ -477,7 +549,6 @@ const USR = () => {
                   }
                 </tr>
 
-
                 <tr>
                   <th className='headerdiv'>Discourse</th>
                   {
@@ -488,6 +559,7 @@ const USR = () => {
                     )
                   }
                 </tr>
+
                 <tr>
                   <th className='headerdiv'>Speaker's View</th>
                   {
@@ -517,6 +589,7 @@ const USR = () => {
                     )
                   }
                 </tr>
+
                 <tr>
                   <th className='headerdiv'>Scope</th>
                   {
@@ -527,6 +600,7 @@ const USR = () => {
                     )
                   }
                 </tr>
+
                 <tr>
                   <th className='headerdiv'>Sentence Type</th>
                   {
@@ -679,9 +753,6 @@ const USR = () => {
         )
         }
       </>
-
-
-
   )
 };
 

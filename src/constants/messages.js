@@ -12,7 +12,8 @@ const messages = {
   statusUpdatedSuccessfully: 'Status updated successfully',
   failedToUpdateStatus: 'Failed to update status',
   couldNotDeleteDiscourse: 'Could not delete the discourse!',
-  discourseDeletedSuccessfully: 'Discourse deleted successfully!'
+  discourseDeletedSuccessfully: 'Discourse deleted successfully!',
+  couldNotFetchConcepts: 'Could not fetch the corresponding concepts!'
 };
 
 export default messages;

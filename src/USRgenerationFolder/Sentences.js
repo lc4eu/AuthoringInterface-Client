@@ -11,18 +11,21 @@ const Sentences = () => {
   const sentencesPerPage = 11;
   const [highlightedIndex, setHighlightedIndex] = useState(0);
   const [usrsForSenteces, setUsrsForSenteces] = useState()
-  const [showUSREditTable, setshowUSREditTable] = useState(false);
 
+  const newusrsForSenteces = { ...usrsForSenteces }
 
   const getUsrForSentences = async () => {
     try {
       const searchParams = new URLSearchParams(window.location.search);
       const discourse_id = searchParams.get('discourseid');
       const result = await customAxios.get(`/usrs_for_a_discourse/${discourse_id}`);
-
       if (result.status === 200) {
-        setUsrsForSenteces(result.data)
-        console.log(usrsForSenteces)
+        for (var x = 0; x < result.data.length; x++) {
+          newusrsForSenteces[x] = result.data[x]
+        }
+        console.log(newusrsForSenteces[0]['USR_ID'])
+        console.log(newusrsForSenteces[0]['orignal_USR_json'])
+
       }
 
       if (result.response?.status === 400) {
@@ -35,16 +38,8 @@ const Sentences = () => {
   };
 
   useEffect(() => {
-    try {
-      if (showUSREditTable) {
-        getUsrForSentences();
-        setshowUSREditTable(false)
-      }
-    }
-    catch (exception) {
-      console.log(exception)
-    }
-  }, [getUsrForSentences, showUSREditTable])
+    getUsrForSentences();
+  }, [])
 
 
   useEffect(() => {
@@ -90,12 +85,11 @@ const Sentences = () => {
         <p key={startIndex + index} style={{ backgroundColor: highlightedIndex === startIndex + index ? 'yellow' : 'white' }} onClick={event => handleClick(startIndex + index, item)}>
           {startIndex + index + 1}.
           {item}
-
           {/* <div class="idtooltip">{startIndex + index + 1}.
-            <span class="idtooltiptext">{usrsForSenteces[index]['USR_ID']}<ContentCopyIcon onClick={handleCopyToClipboard}></ContentCopyIcon></span>
+            <span class="idtooltiptext">{newusrsForSenteces[index]['USR_ID']}<ContentCopyIcon onClick={handleCopyToClipboard}></ContentCopyIcon></span>
           </div>
           <div class="tooltip">{item}
-            <span class="tooltiptext"><ContentCopyIcon onClick={handleCopyToClipboard}></ContentCopyIcon><br></br>{usrsForSenteces[index]['orignal_USR_json']}</span>
+            <span class="tooltiptext"><ContentCopyIcon onClick={handleCopyToClipboard}></ContentCopyIcon><br></br>{newusrsForSenteces[index]['orignal_USR_json']}</span>
           </div> */}
         </p>
       ))}
