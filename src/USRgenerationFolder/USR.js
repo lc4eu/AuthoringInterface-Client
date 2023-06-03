@@ -23,6 +23,8 @@ const USR = () => {
   const [discourseId, setDiscourseId] = useState('');
   const [showUSREditTable, setshowUSREditTable] = useState(false);
 
+  const [conceptListIndex, setConceptListIndex] = useState(null);
+
   const [nounsData, setNounsData] = useState([]);
   const [sentenceTData, setsentenceTData] = useState([]);
   const [speakersviewData, setspeakersviewData] = useState([]);
@@ -196,6 +198,14 @@ const USR = () => {
     catch (exception) {
       console.log(exception)
     }
+  }
+
+  function showConceptList(index) {
+    setConceptListIndex(index);
+  }
+
+  function closeConceptList() {
+    setConceptListIndex(null);
   }
 
   const handleChange = (event, key, index) => {
@@ -389,7 +399,7 @@ const USR = () => {
     const shouldChangeConcept = window.confirm('Are you sure you want to choose this concept?');
     if (shouldChangeConcept) {
       const newSelectedData = { ...selectedData };
-      newSelectedData["Concept"][index] = selectedOption;
+      newSelectedData["Concept"][0] = selectedOption;
       setSelectedData(newSelectedData);
     }
   };
@@ -398,6 +408,30 @@ const USR = () => {
     setConceptList(concept_List)
   }
 
+  function handleConceptSelect(concept, index) {
+    const newData = { ...selectedData }
+    newData["Concept"][index] = concept
+    console.log(newData["Concept"], index);
+    setSelectedData(newData)
+    closeConceptList();
+  }
+
+  function renderConceptList() {
+
+    if (conceptListIndex === null) {
+      return;
+    }
+
+    const conceptListPopupAttributes = {
+      open: true,
+      data: selectedData,
+      index: conceptListIndex,
+      onClose: closeConceptList,
+      onSelect: handleConceptSelect
+    };
+
+    return <ConceptListPopup {...conceptListPopupAttributes} />;
+  }
 
   return (
     loading ? <div>Loading...</div> :
@@ -435,6 +469,13 @@ const USR = () => {
                 <tr >
                   <div className='headerdiv'></div>
                   {
+                    selectedData.Concept.map((item, index) => (
+                      <td key={index}>
+                        <Button sx={{ margin: '5px' }} variant="contained" onClick={() => showConceptList(index)}>Suggest concept</Button>
+                      </td>
+                    ))
+                  }
+                  {/* {
                     selectedData.Concept.map((item, i) => {
                       return (<td key={i}>
                         <ConceptListPopup
@@ -446,7 +487,7 @@ const USR = () => {
                         />
                       </td>)
                     })
-                  }
+                  } */}
                 </tr>
 
                 <tr>
@@ -758,6 +799,7 @@ const USR = () => {
           </table>
         )
         }
+        {renderConceptList()}
       </>
   )
 };
