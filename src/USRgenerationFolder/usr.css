@@ -163,6 +163,7 @@ td {
 .headerdiv2 {
   padding-left: 7px;
   padding-right: 7px;
+  white-space: nowrap;
 }
 
 .tta1 {

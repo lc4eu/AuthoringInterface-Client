@@ -354,10 +354,10 @@ const USR = () => {
   ]
 
 
-  const suggestConcept = async (event, key, index) => {
+  const suggestConcept = async (index) => {
     try {
       const params = {
-        concept: selectedData[key][index]
+        concept: selectedData["Concept"][index]
       };
       const result = await customAxios.post('/suggestedConcept', params);
 
@@ -383,15 +383,20 @@ const USR = () => {
 
   const [selectedOption, setSelectedOption] = useState('');
 
-  const handleSelectOption = (option) => {
+  const handleSelectOption = (option, index) => {
     setSelectedOption(option);
+    console.log(index)
     const shouldChangeConcept = window.confirm('Are you sure you want to choose this concept?');
     if (shouldChangeConcept) {
       const newSelectedData = { ...selectedData };
-      newSelectedData["Concept"][0] = selectedOption;
+      newSelectedData["Concept"][index] = selectedOption;
       setSelectedData(newSelectedData);
     }
   };
+
+  const handleConceptList = (concept_List) => {
+    setConceptList(concept_List)
+  }
 
 
   return (
@@ -433,9 +438,11 @@ const USR = () => {
                     selectedData.Concept.map((item, i) => {
                       return (<td key={i}>
                         <ConceptListPopup
+                          // options={() => suggestConcept(i)}
                           options={newConceptList}
                           onSelect={handleSelectOption}
-                          conceptToBeSuggested={selectedData['Concept'][i]}
+                          // onSelect={(event) => suggestConcept(event, i)}
+                          indexOfConcept={i}
                         />
                       </td>)
                     })
@@ -650,16 +657,7 @@ const USR = () => {
                   )
                 }
               </tr>
-              {/* <tr>
- <div className='headerdiv'><th>Index</th></div>
- {
- selectedData.Index.map((item,i) => {
- return <td><div className="headerdiv2">{item}</div></td>
- }
- 
- )
- }
- </tr> */}
+
               <tr>
                 <th className='headerdiv'>Index</th>
                 {
@@ -668,6 +666,7 @@ const USR = () => {
                   })
                 }
               </tr>
+
               <tr>
                 <th className='headerdiv'>Sem. Cat</th>
                 {
@@ -678,6 +677,7 @@ const USR = () => {
                   )
                 }
               </tr>
+
               <tr>
                 <th className='headerdiv'>G-N-P</th>
                 {
@@ -688,6 +688,7 @@ const USR = () => {
                   )
                 }
               </tr>
+
               <tr>
                 <th className='headerdiv'>Dep-Rel</th>
                 {
@@ -698,6 +699,7 @@ const USR = () => {
                   )
                 }
               </tr>
+
               <tr>
                 <th className='headerdiv'>Discourse</th>
                 {
@@ -708,6 +710,7 @@ const USR = () => {
                   )
                 }
               </tr>
+
               <tr>
                 <th className='headerdiv'>Speaker's View</th>
                 {
@@ -718,6 +721,7 @@ const USR = () => {
                   )
                 }
               </tr>
+
               <tr>
                 <th className='headerdiv'>Scope</th>
                 {
@@ -728,6 +732,7 @@ const USR = () => {
                   )
                 }
               </tr>
+
               <tr>
                 <th className='headerdiv'>Sentence Type</th>
                 {
@@ -738,6 +743,7 @@ const USR = () => {
                   )
                 }
               </tr>
+
               <tr>
                 <th className='headerdiv'>Construction</th>
                 {
