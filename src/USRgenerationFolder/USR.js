@@ -343,18 +343,18 @@ const USR = () => {
 
   const [conceptList, setConceptList] = useState([])
   const newConceptList = [
-    "kuCa_1:some_2",
-    "kuCa_2:few_5",
-    "kuCa_3:something_1",
-    "kuCa_6:something_1",
-    "kuCa_4:money_11",
-    "kuCa_5:somewhat_5",
-    "kuCa_7:little_1",
-    "kuCa_8:slight_12",
+    { "Concept": "kuCa_1", "Meaning": "some_2" },
+    { "Concept": "kuCa_2", "Meaning": "few_5" },
+    { "Concept": "kuCa_3", "Meaning": "something_1" },
+    { "Concept": "kuCa_4", "Meaning": "money_11" },
+    { "Concept": "kuCa_5", "Meaning": "somewhat_5" },
+    { "Concept": "kuCa_6", "Meaning": "something_1" },
+    { "Concept": "kuCa_7", "Meaning": "little_1" },
+    { "Concept": "kuCa_8", "Meaning": "slight_12" }
   ]
 
 
-  async function suggestConcept(event, key, index) {
+  const suggestConcept = async (event, key, index) => {
     try {
       const params = {
         concept: selectedData[key][index]
@@ -369,10 +369,9 @@ const USR = () => {
         console.log(newConceptList)
         setConceptList(newConceptList)
         console.log(conceptList)
-
       }
 
-      if (result.response?.status == 400) {
+      if (result.response?.status === 400) {
         return alert(messages.couldNotFetchConcepts)
       }
     }
@@ -432,10 +431,11 @@ const USR = () => {
                   <div className='headerdiv'></div>
                   {
                     selectedData.Concept.map((item, i) => {
-                      return (<td key={i} onClick={(event) => suggestConcept(event, "Concept", i)} >
+                      return (<td key={i}>
                         <ConceptListPopup
                           options={newConceptList}
                           onSelect={handleSelectOption}
+                          conceptToBeSuggested={selectedData['Concept'][i]}
                         />
                       </td>)
                     })
