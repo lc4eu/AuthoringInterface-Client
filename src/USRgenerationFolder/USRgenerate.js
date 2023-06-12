@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react'
 import customAxios from "../axios";
 import axios from 'axios';
 import messages from '../constants/messages';
+import Sentences from './Sentences';
+import USR from './USR';
+import { CircularProgress } from '@mui/material';
+import { useNavigate } from "react-router-dom";
 
 
 const USRgenerate = () => {
@@ -12,7 +16,9 @@ const USRgenerate = () => {
   const [receivedIndex, setReceivedIndex] = useState('');
   const [receivedItem, setReceivedItem] = useState('')
   const [showUSREditTable, setshowUSREditTable] = useState(false);
-  const [hideUSRCreationButtons, sethideUSRCreationButtons] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate();
+
 
 
   const serverURl = process.env.REACT_APP_API_BASE_URL;
@@ -57,6 +63,7 @@ const USRgenerate = () => {
   }
 
   async function handleFileSelection(event) {
+    setLoading(true)
     const file = event.target.files[0];
     const file_name = file.name.split('.')[0];
     const reader = new FileReader();
@@ -131,10 +138,11 @@ const USRgenerate = () => {
       setshowUSREditTable(true)
       if (result.status === 200) {
         alert(messages.USRsGeneratedSuccessfully);
+        setLoading(false)
       }
 
       if (result.response?.status === 400) {
-        return alert(messages.somethingWentWrong);
+        return alert(messages.USRsCouldNotBeGeneratedSuccessfully);
       }
     };
     reader.readAsText(file);
@@ -142,6 +150,7 @@ const USRgenerate = () => {
 
   async function handleAutomaticGeneratedUSRs(event) {
     event.preventDefault()
+    setLoading(true)
     try {
       const params = {
         discourse: discourse,
@@ -152,15 +161,17 @@ const USRgenerate = () => {
       const result = await customAxios.post("/usrgenerate", params);
 
       if (result.status === 200) {
-        alert(messages.AutomaticUSRsGeneratedSuccessfully);
         setDiscourseId(result.data)
         setDiscourse(discourse)
         setDiscourseName(discourse_name)
         setShowIframe(true)
         setshowUSREditTable(true)
+        setLoading(false)
+        return alert(messages.AutomaticUSRsGeneratedSuccessfully);
+        // return navigate(`/usrgenerate?dasboard_discourseid_for_edit=${result.data}&edit_from_dasboard=${true}`)
       }
       if (result.response?.status === 400) {
-        return alert(messages.somethingWentWrong);
+        return alert(messages.AutomaticUSRsCouldNotBeGenerated);
       }
     }
     catch (exception) {
@@ -188,25 +199,10 @@ const USRgenerate = () => {
     }
   }, [serverURl])
 
-  // async function hideUSRCreationConrolButton() {
-  //   try {
-  //     const searchParams = new URLSearchParams(window.location.search);
-  //     console.log(searchParams.get('hidecontrols'))
-  //     if (searchParams.get('hidecontrols')) {
-  //       return (
 
-  //       );
-  //     }
-  //     else {
-  //     }
-  //   }
-  //   catch (exception) {
-  //     console.log(exception)
-  //   }
-  // }
+  function renderUSRGenereateForm() {
 
-  return (
-    <>
+    return (
       <form onSubmit={handleSubmit}>
         <div className="entry_components">
           <div className="tta1">
@@ -220,14 +216,41 @@ const USRgenerate = () => {
           <div className="ttab3">
             <input type='file' onChange={handleFileSelection} />
             {/* <input type='submit' name="Generate USR" onClick={saveChanges} value="USR Generate" disabled={!sentences} /> */}
-            <div className="ttab1"><input type='button' name="Generate USR" value="USR Generate" disabled={!discourse} onClick={handleAutomaticGeneratedUSRs} /></div>
+            {/* <div className="ttab1"></div> */}
+            <input type='button' name="Generate USR" value="USR Generate" disabled={!discourse} onClick={handleAutomaticGeneratedUSRs} />
           </div>
         </div>
-        <div className="frame_container">
-          <iframe className="outl" width="500" height="540" title="sentence" src={`/sentences/?showUSREditTable=${showUSREditTable}&discourse=${discourse}&discourseid=${discourseId}`} />
-          <div className="usrtop"><iframe className="usr_usrtop" width="994px" id="usr" height="540" title="usr" src={`/usrtablepath?showUSREditTable=${showUSREditTable}&discourseid=${discourseId}&receivedindex=${receivedIndex}&discoursename=${discourse_name}&receivedItem=${receivedItem}`} /> </div>
-        </div>
       </form>
+    );
+  }
+
+  function renderUSRContent() {
+
+    const sentencesAttributes = {
+      discourse,
+      discourseid: discourseId
+    };
+
+    const usrAttributes = {
+      showUSREditTable,
+      discourseid: discourseId,
+      receivedindex: receivedIndex,
+      discoursename: discourse_name,
+      receivedItem: receivedItem
+    };
+
+    return (
+      <div className="frame_container">
+        <Sentences {...sentencesAttributes} />
+        <USR {...usrAttributes} />
+      </div>
+    );
+  }
+
+  return (
+    <>
+      {renderUSRGenereateForm()}
+      {loading ? <CircularProgress sx={{ alignItems: 'center' }} color="secondary" /> : renderUSRContent()}
     </>
   )
 };

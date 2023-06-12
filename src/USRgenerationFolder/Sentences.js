@@ -5,7 +5,10 @@ import customAxios from "../axios";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 
-const Sentences = () => {
+const Sentences = (props) => {
+
+  const { discourse, discourseid } = props;
+
   const [value_in_array, setValueInArray] = useState([]);
   const [page, setPage] = useState(1);
   const sentencesPerPage = 11;
@@ -16,9 +19,7 @@ const Sentences = () => {
 
   const getUsrForSentences = async () => {
     try {
-      const searchParams = new URLSearchParams(window.location.search);
-      const discourse_id = searchParams.get('discourseid');
-      const result = await customAxios.get(`/usrs_for_a_discourse/${discourse_id}`);
+      const result = await customAxios.get(`/usrs_for_a_discourse/${discourseid}`);
       if (result.status === 200) {
         for (var x = 0; x < result.data.length; x++) {
           newusrsForSenteces[x] = result.data[x]
@@ -37,26 +38,23 @@ const Sentences = () => {
     }
   };
 
-  useEffect(() => {
-    getUsrForSentences();
-  }, [])
+  // useEffect(() => {
+  //   getUsrForSentences();
+  // }, [])
 
 
   useEffect(() => {
     try {
-      const searchParams = new URLSearchParams(window.location.search);
-      const sentence = searchParams.get('discourse');
-      // const ending = /(?<=[।])/g;
       const ending = /\।|\?|\||\./;
 
-      let value_in_array = sentence.split(ending);
-      setValueInArray(value_in_array);
+      let value_in_array = discourse.split(ending);
+      setValueInArray(value_in_array.slice(0, -1));
     }
     catch (exception) {
       console.log(exception)
     }
 
-  }, []);
+  }, [discourse]);
 
   const handleClick = (index, item) => {
     setTimeout(() => {
@@ -80,24 +78,25 @@ const Sentences = () => {
 
   return (
 
-    <div>
-      {selectedSentences.map((item, index) => (
-        <p key={startIndex + index} style={{ backgroundColor: highlightedIndex === startIndex + index ? 'yellow' : 'white' }} onClick={event => handleClick(startIndex + index, item)}>
-          {startIndex + index + 1}.
-          {item}
-          {/* <div class="idtooltip">{startIndex + index + 1}.
+    <div className='sentences_container'>
+      <div className='sentences'>
+        {selectedSentences.map((item, index) => (
+          <p key={startIndex + index} style={{ backgroundColor: highlightedIndex === startIndex + index ? 'yellow' : 'white' }} onClick={event => handleClick(startIndex + index, item)}>
+            {startIndex + index + 1}.
+            {item}
+            {/* <div class="idtooltip">{startIndex + index + 1}.
             <span class="idtooltiptext">{newusrsForSenteces[index]['USR_ID']}<ContentCopyIcon onClick={handleCopyToClipboard}></ContentCopyIcon></span>
           </div>
           <div class="tooltip">{item}
             <span class="tooltiptext"><ContentCopyIcon onClick={handleCopyToClipboard}></ContentCopyIcon><br></br>{newusrsForSenteces[index]['orignal_USR_json']}</span>
           </div> */}
-        </p>
-      ))}
+          </p>
+        ))}
+      </div>
+
       <div className='alignPagination'>
         <Pagination count={pageCount} size="large" page={page} onChange={handleChangePage} />
       </div>
-
-
     </div>
   );
 };

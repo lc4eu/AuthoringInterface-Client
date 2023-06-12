@@ -136,12 +136,24 @@ td {
 .MuiPagination-root {
   background-color: hsl(0, 0%, 100%);
 }
-.usrBtnControls {
-  margin-top: 10px;
+
+
+.editTableGrid{
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: auto auto auto;
+  grid-template-rows: auto auto;
+  grid-gap: 5px;
+  overflow: auto;
+  background-color: #ffe9ec;
+}
+
+.sentences_container{
+  position: relative;
 }
 .alignPagination {
   position: absolute;
-  bottom: 0;
+  top: 0;
   width: 100%;
   height: 50px;
   overflow: hidden;
@@ -164,6 +176,14 @@ td {
   padding-left: 7px;
   padding-right: 7px;
   white-space: nowrap;
+}
+
+.frame_container{
+  margin: 30px;
+  display: grid;
+  padding: 20px;
+  grid-template-columns: calc(40% - 10px) calc(60% - 10px);
+  column-gap: 20px;
 }
 
 .tta1 {

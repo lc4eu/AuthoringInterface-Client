@@ -55,6 +55,11 @@ function Navbar(props) {
           )}
           {props.hideLogin ? null : (
             <li>
+              <NavLink to="/dashboard">Dashboard</NavLink>
+            </li>
+          )}
+          {props.hideLogin ? null : (
+            <li>
               <NavLink to="/login">LOGIN</NavLink>
             </li>
           )}
