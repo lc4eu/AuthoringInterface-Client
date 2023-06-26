@@ -1,0 +1,149 @@
+#about{
+    width: 80%;
+}
+h1{
+    text-align: center;
+    color: rgb(50,58,217);
+}
+#trynow{
+    margin-left: 30%;
+    background-color: rgb(6, 6, 135);
+    color: antiquewhite;
+    border-radius: 3px;
+    width: 200px;
+    height: 100px;
+    font-size: 10px;
+    font-weight: 100px;
+}
+#news{
+    margin:10px;
+    flex:1;
+    height: 300px;
+    width: 10%;
+}
+#upper{ 
+    display: flex;
+    align-items: center;
+}
+#about{
+    flex: 2;
+    margin-right: 20px;
+}
+.container {
+    display: flex;
+}
+
+.box {
+    flex: 1;
+    height: 300px;
+    margin: 10px;
+    background-color:white;
+    border: 2px solid #ec7234;
+    border-radius: 5px;
+    margin: 20px;
+}
+#img_in_box{
+    max-width: 50px;
+    margin-left: 40%;
+    margin-top: 20px;
+    border:2px solid green;
+    border-radius: 100px;
+}
+#pas{
+    color: rgb(16, 42, 126);
+}
+h2{
+    text-align: center;
+    font-size: 20px;
+    
+    color: rgb(60,76,166);
+}
+p{
+    margin-left:10px;
+}
+.container2 {
+    display: flex;
+}
+
+.box2 {
+    flex: 1;
+    margin: 10px;
+    height: max-content;
+    background-color:white;
+    margin: 20px;
+}
+.container3 {
+    display: flex;
+}
+
+.box3 {
+    flex: 1;
+    margin: 10px;
+    height: 150px;
+    text-align: center;
+    width: 200px;
+    border-radius: 5px;
+    background-color:rgb(151, 147, 147);
+}
+.container4 {
+    display: flex;
+}
+
+.box4 {
+    flex: 1;
+    margin: 5px;
+    width: 200px;
+    text-align: center;
+    border: 2px solid aqua;
+    border-radius: 5px;
+    background-color:white;
+}
+.contactus{
+    display:flex;
+}
+.map{
+    flex:1;
+}
+form{
+    text-align: center;
+}
+#name{
+    width: 80%;
+    margin: 10px;
+    border:2px solid orange;
+border: 1px solid white;
+    border-radius: 5px;
+    color: black;
+}
+#address{
+    width: 80%;
+    margin:10px;
+    border:2px solid orange;
+    border-radius: 5px;
+    height:60px;
+}
+#button{
+    color: white;
+    background-color: #323AD9;
+    border: 1px solid white;
+    border-radius: 4px;
+}
+.footer{
+    display:flex;
+    color: white;
+    background-color: rgb(242, 104, 53);
+    height: max-content;
+    width: 100%;
+    border: 1px solid white;
+    border-radius: 10px;
+}
+.add{
+    flex:1;
+    text-align: center;
+    
+}
+.icons{
+    color: white;
+    padding-right: 2px;
+    padding-top: 5px;
+}
