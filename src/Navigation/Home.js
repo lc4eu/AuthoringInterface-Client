@@ -26,8 +26,7 @@ const Home = () => {
 
       <img id="news" src="https://i.pinimg.com/564x/59/32/29/593229739184504afd9507cc42a9cb86.jpg" />
       </div>
-      <button type="submit" id='trynow'><NavLink to = "/spi" id="link">Try now</NavLink></button>
-
+      <button type="submit" id='trynow'><NavLink to="/spi" id="link">Try now</NavLink></button>
       <h1>Features</h1>
       <div class="container">
         <div class="box">
