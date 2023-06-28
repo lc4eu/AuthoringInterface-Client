@@ -186,7 +186,6 @@ const USR = (props) => {
 
   const showUSRData = async () => {
     try {
-      
       const result = await customAxios.get(`/orignal_usr_fetch/${discourseid}`);
       if (result.status === 200) {
         const usr_data = result.data
