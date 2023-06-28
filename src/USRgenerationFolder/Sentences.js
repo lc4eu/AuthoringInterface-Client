@@ -79,6 +79,9 @@ const Sentences = (props) => {
   return (
 
     <div className='sentences_container'>
+      <div className='alignPagination'>
+        <Pagination count={pageCount} size="large" page={page} onChange={handleChangePage} />
+      </div>
       <div className='sentences'>
         {selectedSentences.map((item, index) => (
           <p key={startIndex + index} style={{ backgroundColor: highlightedIndex === startIndex + index ? 'yellow' : 'white' }} onClick={event => handleClick(startIndex + index, item)}>
@@ -94,9 +97,7 @@ const Sentences = (props) => {
         ))}
       </div>
 
-      <div className='alignPagination'>
-        <Pagination count={pageCount} size="large" page={page} onChange={handleChangePage} />
-      </div>
+
     </div>
   );
 };

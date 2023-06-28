@@ -83,22 +83,22 @@ const Signup = () => {
         </div>
 
         <div class="field">
-          <label for="author_name">Username</label>
-          <input id="author_name" type="text" name="author_name" required />
+          {/* <label for="author_name">Username</label> */}
+          <input id="author_name" type="text" placeholder="Enter a username" name="author_name" required />
         </div>
         <div class="field">
-          <label for="email">Email</label>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <input id="email" type="text" name="email" required />
+          {/* <label for="email">Email</label> */}
+          {/* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
+          <input id="email" type="text" placeholder="Enter your email" name="email" required />
         </div>
         <div class="field">
-          <label for="password">Password</label>&nbsp;&nbsp;
-          <input id="password" type="password" name="password" required />
+          {/* <label for="password">Password</label>&nbsp;&nbsp; */}
+          <input id="password" type="password" placeholder="Enter a password" name="password" required />
         </div>
 
         <div class="radio2">
           <p>
-            Reviewer Role:&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reviewer Role:&nbsp;&nbsp;
             <input
               type="radio"
               id="a_reviewer_role"
@@ -118,12 +118,13 @@ const Signup = () => {
         </div>
 
         <div class="adbutton">
-          <button type="submit" value="SIGN UP" >SIGN UP</button>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" value="SIGN UP" >SIGN UP</button>
         </div>
 
         <p>
-          Already have an account?<NavLink to="/login">LOGIN</NavLink>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Already have an account?<NavLink to="/login">LOGIN</NavLink>
         </p>
+        <br />
       </form>
     </div>
   );

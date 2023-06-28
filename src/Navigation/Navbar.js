@@ -4,6 +4,7 @@ import { FaUser } from "react-icons/fa";
 import React from 'react';
 import Button from "@material-ui/core/Button";
 import { getApplicationStorage, clearApplicationStorage } from "../utilities/storage";
+import messages from "../constants/messages";
 
 import customAxios from '../axios';
 
@@ -22,6 +23,28 @@ function Navbar(props) {
 
     } catch (exception) {
       console.log(exception);
+    }
+  }
+
+  async function handleChangePasswordClick() {
+    try {
+      const shouldchange = window.confirm('Are you sure you want to change the password?');
+      if (shouldchange) {
+        const result = await customAxios.delete(`/change_password/${localStorage.getItem('author_id')}`);
+        if (result.response?.status === 400) {
+          return alert(messages.couldNotDeleteDiscourse);
+        }
+
+        if (result.status === 200) {
+          alert(messages.discourseDeletedSuccessfully);
+          return window.location.reload();
+        }
+      }
+      else {
+      }
+    }
+    catch (exception) {
+      console.log(exception)
     }
   }
 
@@ -83,6 +106,11 @@ function Navbar(props) {
             <NavLink to="/dashboard">
               <FaUser></FaUser> {_session.author_name}
             </NavLink>
+          </li>
+          <li>
+            <Button variant="contained" onClick={handleChangePasswordClick}>
+              Change Password
+            </Button>
           </li>
           <li>
             <Button variant="contained" onClick={handleLogoutControlClick}>

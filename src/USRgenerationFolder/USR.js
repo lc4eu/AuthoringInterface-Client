@@ -314,7 +314,7 @@ const USR = (props) => {
   }
 
   return (
-    loading ? <CircularProgress sx={{ alignItems: 'center' }} color="secondary" /> :
+    loading ? <CircularProgress sx={{ alignItems: 'center', marginLeft: '30%', marginTop: '10%' }} color="secondary" /> :
       <>
 
         <div className='editTableGrid'>
@@ -322,7 +322,7 @@ const USR = (props) => {
             <Button sx={{ margin: '5px' }} variant="contained" onClick={viewTable} disabled={reviewStatus === "In Review"}>Edit</Button>
             <Button sx={{ margin: '5px' }} variant="contained" onClick={() => saveChanges()} disabled={reviewStatus === "In Review"}>Save</Button>
             <Button sx={{ margin: '5px' }} variant="contained" onClick={saveDownload}>Save & Download</Button>
-            <Button sx={{ margin: '5px' }} variant="contained" onClick={submitForReview} disabled={reviewStatus === "In Review"}>Submit for Review</Button>
+            {/* <Button sx={{ margin: '5px' }} variant="contained" onClick={submitForReview} disabled={reviewStatus === "In Review"}>Submit for Review</Button> */}
             <br></br><label htmlFor="status">Status:</label><input type="text" id="status" value={reviewStatus} readOnly />
           </div>
 
