@@ -1,10 +1,10 @@
-.cards {
+.dash_cards {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.cards #card {
+.dash_cards #dash_card {
   background-color: rgb(191, 221, 230);
   width: 200px;
   height: 100px;
@@ -19,8 +19,9 @@
   word-wrap: break-word;
   display: grid;
   place-items: center;
+  margin: 20px;
 }
-.cards #card:hover {
+.dash_cards #dash_card:hover {
   transform: translateY(-5px);
 }
 .components {

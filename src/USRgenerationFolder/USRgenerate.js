@@ -250,7 +250,7 @@ const USRgenerate = () => {
   return (
     <>
       {renderUSRGenereateForm()}
-      {loading ? <CircularProgress sx={{ alignItems: 'center' }} color="secondary" /> : renderUSRContent()}
+      {loading ? <CircularProgress sx={{ alignItems: 'center', marginLeft: '30%', marginTop: '10%' }} color="secondary" /> : renderUSRContent()}
     </>
   )
 };

@@ -86,20 +86,20 @@ const Login = () => {
   // }
 
   return (
-    <div className="adcontent">
+    <div style={{ marginLeft: '400px' }} className="adcontent">
       <form onSubmit={handleLoginSubmit}>
         <div className="headname">
           <h1>LOGIN</h1>
         </div>
         <div className="field">
-          <label for="email">Email</label>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <input type="text" name="email" id="email" required />
+          {/* <label for="email">Email</label> */}
+          {/* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
+          <input type="text" name="email" id="email" placeholder="Enter your email" required />
         </div>
 
         <div className="field">
-          <label for="password">Password</label>
-          <input type="password" name="password" id="password" />
+          {/* <label for="password">Password</label> */}
+          <input type="password" placeholder="Enter your password" name="password" id="password" />
         </div>
 
         <div className="radio">
@@ -114,10 +114,14 @@ const Login = () => {
           <input type="submit" value="LOG IN" />
         </div>
       </form>
-
-      <p>
+      <div className="ribbons1">
+        <NavLink style={{ marginLeft: '30%' }} to="/signup">Forgot Password</NavLink>
+      </div><br />
+      <div style={{ marginLeft: '22%' }} className="ribbons2">
         Don't have any account?<NavLink to="/signup">SIGN UP</NavLink>
-      </p>
+      </div>
+
+
       <br />
       <br />
     </div>

@@ -173,14 +173,16 @@ const Dashboard = () => {
 
   function renderCards() {
     return (
-      <div className="cards">
-        <div id="card">{carddata.discourse_count} Discourses created</div>
-        <div id="card">{carddata.usr_count} USRs Generated</div>
-        <div id="card">{carddata.approved_count} Discourses Approved</div>
-        <div id="card">
+      <div className="dash_cards">
+        <div id="dash_card">{carddata.discourse_count} Discourses created</div>
+        <div id="dash_card">{carddata.usr_count} USRs Generated</div>
+        <div id="dash_card">{carddata.approved_count} Discourses Approved</div>
+        <div style={{ fontSize: '10px' }} id="dash_card">
           <Link to={"/usrgenerate"} className="hover_text" data-tooltip="Click to add new discourse.">
             <FaPlusCircle size="50px" color="black"></FaPlusCircle>
+
           </Link>
+          Click to add new discourse.
         </div>
       </div>
     );
@@ -271,7 +273,7 @@ const Dashboard = () => {
                       </div>
                     </button> */}
                   <button className="but">
-                    <div className="hover_text" data-tooltip="Click to view the discourse." >
+                    <div className="hover_text" data-tooltip="Click to edit the discourse." >
                       <Link to={`/usrgenerate?dasboard_discourseid_for_edit=${dis.discourse_id}&edit_from_dasboard=${true}`}><FaEdit id="action_button" size="20px" color="black"></FaEdit></Link>
                     </div>
                   </button>

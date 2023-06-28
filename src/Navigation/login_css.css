@@ -33,14 +33,15 @@
 .adbutton {
   margin-top: 40px;
   margin-left: 175px;
-  padding-bottom: 100px;
+  padding-bottom: 60px;
 }
-.adbutton button {
+.adbutton input,button {
   border: 1px solid rgba(255, 255, 255, 0.438);
   border-radius: 8px;
   width: 116px;
   height: 40px;
 }
+
 .headname {
   margin-left: 191px;
   color: white;
@@ -52,5 +53,8 @@
 }
 .radio label {
   font-size: 21px;
+  color: white;
+}
+::placeholder{
   color: white;
 }

@@ -149,10 +149,12 @@ td {
 }
 
 .sentences_container{
-  position: relative;
+  /* position: relative; */
+  display: flex;
+  flex-direction: column;
 }
 .alignPagination {
-  position: absolute;
+  /* position: absolute; */
   top: 0;
   width: 100%;
   height: 50px;
