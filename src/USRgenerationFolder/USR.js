@@ -49,7 +49,7 @@ const USR = (props) => {
 
       if (result.status === 200) {
         alert(messages.savedSuccessfully);
-        return window.location.reload();
+        //return window.location.reload();
       }
 
       if (result.response?.status === 400) {
@@ -185,6 +185,7 @@ const USR = (props) => {
 
   const showUSRData = async () => {
     try {
+
       const result = await customAxios.get(`/orignal_usr_fetch/${discourseid}`);
       if (result.status === 200) {
         const usr_data = result.data
