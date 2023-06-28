@@ -180,7 +180,6 @@ const Dashboard = () => {
         <div style={{ fontSize: '10px' }} id="dash_card">
           <Link to={"/usrgenerate"} className="hover_text" data-tooltip="Click to add new discourse.">
             <FaPlusCircle size="50px" color="black"></FaPlusCircle>
-
           </Link>
           Click to add new discourse.
         </div>
