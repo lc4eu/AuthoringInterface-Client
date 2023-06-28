@@ -23,6 +23,7 @@ const USR = (props) => {
   const [speakersviewData, setspeakersviewData] = useState([]);
   const [depRelData, setDepRelData] = useState([]);
 
+  receivedindex = 0;
   let finalJson;
   let sentence_id = 0;
   let r_status;
