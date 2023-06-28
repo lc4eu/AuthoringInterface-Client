@@ -1,0 +1,7 @@
+receivedindex : 1. Set usr index to 0 when we click edit discourse button in Dashboard
+or 
+1. whenever orignal_usr_fetch is called, USR index should be set to 0. 
+2. USRgenerate.js>renderUI <no parameters>> listen for event > call appropriate function
+renderUSRcontent - >calls renderUSRcontent
+coming from dashboard> click on '+' >-> renderUI <no parameters>
+coming from dashboard> click on 'edit' >-> renderUI <discourse_id, edit= true>
