@@ -148,7 +148,7 @@ const USRgenerate = () => {
     reader.readAsText(file);
   };
 
-  async function handleAutomaticGeneratedUSRs(event) {
+  async function handleAutomaticGeneratedUSRs(event) { //only automatic USR generation
     event.preventDefault()
     setLoading(true)
     try {
@@ -200,7 +200,7 @@ const USRgenerate = () => {
   }, [serverURl])
 
 
-  function renderUSRGenereateForm() {
+  function renderUSRGenereateForm() { //render UI only
 
     return (
       <form onSubmit={handleSubmit}>
@@ -241,8 +241,8 @@ const USRgenerate = () => {
 
     return (
       <div className="frame_container">
-        <Sentences {...sentencesAttributes} />
-        <USR {...usrAttributes} />
+        <Sentences {...sentencesAttributes} /> 
+        <USR {...usrAttributes} /> 
       </div>
     );
   }
@@ -250,7 +250,9 @@ const USRgenerate = () => {
   return (
     <>
       {renderUSRGenereateForm()}
-      {loading ? <CircularProgress sx={{ alignItems: 'center' }} color="secondary" /> : renderUSRContent()}
+      {/* conditional variable to show renderUSRContent */}
+      {renderUSRContent()}
+      {/* {loading ? <CircularProgress sx={{ alignItems: 'center' }} color="secondary" /> : renderUSRContent()} */}
     </>
   )
 };
