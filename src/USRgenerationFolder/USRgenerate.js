@@ -201,13 +201,13 @@ console.log(location)
   }, [serverURl])
 
 
-  function renderUSRGenereateForm() { //render UI only
+  function renderUSRGenereateForm() { //render UI of generate form only
 
     return (
       <form onSubmit={handleSubmit}>
         <div className="entry_components">
           <div className="tta1">
-            <p className="lab_discourse">Discourse</p>
+            <p className="lab_discourse">Text of Discourse</p>
             <textarea id="sentences" name="discourse" type="text" value={discourse} onChange={handleDiscourseContent} ></textarea></div>
           <div className="tta2">
             <div className="label_discourse" ><p>Enter discourse name:</p></div>
@@ -215,10 +215,12 @@ console.log(location)
           </div>
           {/* <div className="ttab2"><input type='button' name="Save Sentences"  value="Save discourse" disabled='True' /></div> */}
           <div className="ttab3">
-            <input type='file' onChange={handleFileSelection} />
+            <p> You can also upload USRs from a text file</p>
+            <input type='file' size = '50' onChange={handleFileSelection} />
             {/* <input type='submit' name="Generate USR" onClick={saveChanges} value="USR Generate" disabled={!sentences} /> */}
             {/* <div className="ttab1"></div> */}
-            <input type='button' name="Generate USR" value="USR Generate" disabled={!discourse} onClick={handleAutomaticGeneratedUSRs} />
+            <p> </p>
+            <input type='button' class ='usrEditButton' name="Generate USR" value="USR Generate" disabled={!discourse} onClick={handleAutomaticGeneratedUSRs} />
           </div>
         </div>
       </form>
@@ -226,6 +228,7 @@ console.log(location)
   }
 
   function renderUSRContent() {
+    // function to render the USR content by showing sentence and USR panes
     const edit_discourse_id = searchParams.get('dasboard_discourseid_for_edit')
     if (!edit_discourse_id){
       return
