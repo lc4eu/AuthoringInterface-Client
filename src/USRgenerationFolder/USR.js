@@ -50,7 +50,7 @@ const USR = (props) => {
 
       if (result.status === 200) {
         alert(messages.savedSuccessfully);
-        //return window.location.reload();
+        return window.location.reload();
       }
 
       if (result.response?.status === 400) {
