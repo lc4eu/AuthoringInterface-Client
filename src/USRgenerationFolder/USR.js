@@ -23,7 +23,7 @@ const USR = (props) => {
   const [speakersviewData, setspeakersviewData] = useState([]);
   const [depRelData, setDepRelData] = useState([]);
 
-  receivedindex = 0;
+  //receivedindex = 0;
   let finalJson;
   let sentence_id = 0;
   let r_status;
@@ -193,13 +193,16 @@ const USR = (props) => {
         setUsers(usr_data)
         const usr_result = usr_data
         finalJson = usr_result
-        const orobj = usr_result[receivedindex].edited_usr.replaceAll("'", "\"")
-        r_status = usr_result[receivedindex].status
-        setUsrid(usr_result[receivedindex].usr_id);
+        console.log(usr_result, 'USR')
+        const indexToShow = receivedindex +1
+        const orobj = usr_result[indexToShow].edited_usr.replaceAll("'", "\"")
+        r_status = usr_result[indexToShow].status
+        setUsrid(usr_result[indexToShow].usr_id);
         const orignal_usr_json = JSON.parse(orobj);
+        console.log(orignal_usr_json,'orig_USR')
         setSelectedData(orignal_usr_json);
         setLoading(false);
-        finalJson = usr_result[receivedindex].edited_usr
+        finalJson = usr_result[indexToShow].edited_usr
         setReviewStatus(r_status);
       }
 
@@ -212,8 +215,10 @@ const USR = (props) => {
     }
   }
 
-  useEffect(() => {
-    showUSRData();
+  useEffect(() => { // call showUSRData only if a value is received
+    console.log(receivedindex)
+    if (receivedindex){showUSRData()} 
+    // showUSRData();
   }, [receivedindex])
 
 
