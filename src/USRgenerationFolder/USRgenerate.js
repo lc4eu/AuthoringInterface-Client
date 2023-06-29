@@ -5,7 +5,7 @@ import messages from '../constants/messages';
 import Sentences from './Sentences';
 import USR from './USR';
 import { CircularProgress } from '@mui/material';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 
 
 const USRgenerate = () => {
@@ -18,9 +18,10 @@ const USRgenerate = () => {
   const [showUSREditTable, setshowUSREditTable] = useState(false);
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
 
-
-
+console.log(location)
   const serverURl = process.env.REACT_APP_API_BASE_URL;
 
   window.addEventListener("message", receiveMessage, false);
@@ -225,7 +226,11 @@ const USRgenerate = () => {
   }
 
   function renderUSRContent() {
-
+    const edit_discourse_id = searchParams.get('dasboard_discourseid_for_edit')
+    if (!edit_discourse_id){
+      return
+    }
+    
     const sentencesAttributes = {
       discourse,
       discourseid: discourseId
@@ -238,7 +243,7 @@ const USRgenerate = () => {
       discoursename: discourse_name,
       receivedItem: receivedItem
     };
-
+    
     return (
       <div className="frame_container">
         <Sentences {...sentencesAttributes} /> 
