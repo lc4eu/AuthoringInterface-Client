@@ -229,10 +229,10 @@ console.log(location)
 
   function renderUSRContent() {
     // function to render the USR content by showing sentence and USR panes
-    const edit_discourse_id = searchParams.get('dasboard_discourseid_for_edit')
-    if (!edit_discourse_id){
-      return
-    }
+    // const edit_discourse_id = searchParams.get('dasboard_discourseid_for_edit')
+    // if (!edit_discourse_id){
+    //   return
+    // }
     
     const sentencesAttributes = {
       discourse,
